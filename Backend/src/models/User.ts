@@ -3,8 +3,17 @@ import { sequelize } from '../Config/sequelize';
 
 class User extends Model {
   public id!: number;
-  public username!: string;
+  public firstName!: string;
+  public lastName!: string;
+  public profileImg!: string;
   public email!: string;
+  public password!: string;
+  public phoneNo!: string;
+  public address!: string;
+  public gender!: string;
+  public bloodGroup!: string;
+  public document!: string;
+  public role!: 'Doctor' | 'Patient' | 'Admin';
 }
 
 User.init(
@@ -14,9 +23,17 @@ User.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    firstName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    profileImg:{
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -25,6 +42,26 @@ User.init(
       validate: {
         isEmail: true, 
       },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phoneNo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    document: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    role: {
+      type: DataTypes.ENUM('Doctor', 'Patient', 'Admin'), 
+      allowNull: false,
     },
   },
   {
