@@ -44,6 +44,11 @@ const SignUp = async (req: Request, res: Response) => {
 
 const login = async (req: Request, res: Response) => {
     try {
+        const { password, confirmPassword } = req.body;
+        if(password != confirmPassword){
+            return res.status(500).json({ message: 'Password does not match.' });
+        }
+
         const user: UserType | null = await User.findOne({ where: { email: req.body.email } });
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
