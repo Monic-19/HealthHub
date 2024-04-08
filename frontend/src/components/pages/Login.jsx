@@ -3,13 +3,17 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { Link, useNavigate } from 'react-router-dom';
 import {motion} from "framer-motion";
 import { FaHome } from "react-icons/fa";
+import { useForm } from 'react-hook-form';
 
 const Login = () => {
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const initialMotion = {y: 40, sacle : 0, opacity : 0};
     const finalMotion = {y : 0, scale : 1,opacity : 1};
     const navigate = useNavigate();
+
+    const onSubmit = (data) => console.log(data);
     return (
         <div className='h-[100vh] w-full flex justify-center items-center'>
             <section>
@@ -32,10 +36,10 @@ const Login = () => {
                                 Create a free account
                             </Link>
                         </motion.p>
-                        <form action="#" method="POST" className="mt-8">
+                        <form onSubmit={handleSubmit(onSubmit)} method="POST" className="mt-8">
                             <div className="space-y-5">
                                 <motion.div initial={initialMotion} animate={finalMotion} transition={{duration : 0.6}} >
-                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                    <label htmlFor="email" className="text-base font-medium text-gray-900">
                                         {' '}
                                         Email address{' '}
                                     </label>
@@ -43,15 +47,15 @@ const Login = () => {
                                         <input
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
-                                            value={email}
                                             placeholder="Email"
-                                            onChange={(e) => (setEmail(e.target.value))}
+                                            id='email'
+                                            {...register("email", { required: true })}
                                         ></input>
                                     </div>
                                 </motion.div>
                                 <div>
                                     <motion.div initial={initialMotion} animate={finalMotion} transition={{duration : 0.7}} className="flex items-center justify-between">
-                                        <label htmlFor="" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="password" className="text-base font-medium text-gray-900">
                                             {' '}
                                             Password{' '}
                                         </label>
@@ -66,14 +70,14 @@ const Login = () => {
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="password"
                                             placeholder="Password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
+                                            id='password'
+                                            {...register("password", { required: true })}
                                         ></input>
                                     </motion.div>
                                 </div>
                                 <div>
                                     <motion.button initial={initialMotion} animate={finalMotion} transition={{duration : 0.9}}
-                                        type="button"
+                                        type="submit"
                                         className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                     >
                                         Get started <FaArrowRightLong className="ml-2" size={16} />

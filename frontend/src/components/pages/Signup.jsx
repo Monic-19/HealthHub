@@ -5,14 +5,15 @@ import { Link } from 'react-router-dom';
 import Loader from "./Loader"
 import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 const Signup = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const initialMotion = {x: 300, opacity : 0};
     const finalMotion = {x : 0, opacity:1};
     const navigate = useNavigate();
+
+    const onSubmit = (data) => console.log(data);
     return (
         <div className='h-[100vh] w-full flex justify-center items-center'>
             <section>
@@ -22,90 +23,11 @@ const Signup = () => {
                         <div className="absolute inset-0">
                             <Loader ans={"Where care meet convenience"}/>
                         </div>
-                        
-                        {/* <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
-                        <div className="relative">
-                            <div className="w-full max-w-xl xl:mx-auto xl:w-full xl:max-w-xl xl:pr-24">
-                                <h3 className="text-4xl font-bold text-white">
-                                    Now you dont have to rely on your designer to create a new page
-                                </h3>
-                                <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
-                                    <li className="flex items-center space-x-3">
-                                        <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
-                                            <svg
-                                                className="h-3.5 w-3.5 text-white"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <span className="text-lg font-medium text-white"> Effortless Healthcare Management </span>
-                                    </li>
-                                    <li className="flex items-center space-x-3">
-                                        <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
-                                            <svg
-                                                className="h-3.5 w-3.5 text-white"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <span className="text-lg font-medium text-white"> Enhanced Patient Experience </span>
-                                    </li>
-                                    <li className="flex items-center space-x-3">
-                                        <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
-                                            <svg
-                                                className="h-3.5 w-3.5 text-white"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <span className="text-lg font-medium text-white"> Optimized Doctor-Patient Communication </span>
-                                    </li>
-                                    <li className="flex items-center space-x-3">
-                                        <div className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-500">
-                                            <svg
-                                                className="h-3.5 w-3.5 text-white"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fillRule="evenodd"
-                                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                    clipRule="evenodd"
-                                                ></path>
-                                            </svg>
-                                        </div>
-                                        <span className="text-lg font-medium text-white"> Innovative Virtual Healthcare Solutions </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div> */}
                     </motion.div>
 
                     <div className="flex  items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
 
-                        <div   className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md ">
+                        <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md ">
                             <motion.h2 initial={initialMotion}  animate={finalMotion} transition={{duration : 0.5}} className="text-3xl font-bold leading-tight text-black sm:text-4xl">Sign up</motion.h2>
                             <motion.p initial={initialMotion}  animate={finalMotion} transition={{duration : 0.7}}  className="mt-2 text-base text-gray-600">
                                 Already have an account?{' '}
@@ -116,21 +38,35 @@ const Signup = () => {
                                     Log In
                                 </Link>
                             </motion.p>
-                            <form action="#" method="POST" className="mt-8">
+                            <form onSubmit={handleSubmit(onSubmit)} method="POST" className="mt-8">
                                 <div className="space-y-5 ">
                                     <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 0.9}} >
-                                        <label htmlFor="name" className="text-base font-medium text-gray-900">
+                                        <label htmlFor="firstName" className="text-base font-medium text-gray-900">
                                             {' '}
-                                            Full Name{' '}
+                                            First Name{' '}
                                         </label>
                                         <div className="mt-2">
                                             <input
                                                 className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                                 type="text"
-                                                placeholder="Full Name"
-                                                id="name"
-                                                value={name}
-                                                onChange={(e) => (setName(e.target.value))}
+                                                placeholder="First Name"
+                                                id="firstName"
+                                                {...register("firstName", { required: true })}
+                                            ></input>
+                                        </div>
+                                    </motion.div>
+                                    <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 0.9}} >
+                                        <label htmlFor="lastName" className="text-base font-medium text-gray-900">
+                                            {' '}
+                                            Last Name{' '}
+                                        </label>
+                                        <div className="mt-2">
+                                            <input
+                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="text"
+                                                placeholder="Last Name"
+                                                id="lastName"
+                                                {...register("lastName", { required: true })}
                                             ></input>
                                         </div>
                                     </motion.div>
@@ -145,8 +81,7 @@ const Signup = () => {
                                                 type="email"
                                                 placeholder="Email"
                                                 id="email"
-                                                value={email}
-                                                onChange={(e) => (setEmail(e.target.value))}
+                                                {...register("email", { required: true })}
                                             ></input>
                                         </div>
                                     </motion.div>
@@ -163,14 +98,13 @@ const Signup = () => {
                                                 type="password"
                                                 placeholder="Password"
                                                 id="password"
-                                                value={password}
-                                                onChange={(e) => (setPassword(e.target.value))}
+                                                {...register("password", { required: true })}
                                             ></input>
                                         </div>
                                     </motion.div>
                                     <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 1.5}} >
                                         <button
-                                            type="button"
+                                            type="submit"
                                             className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                         >
                                             Create Account <FaArrowRightLong className="ml-2" size={16} />

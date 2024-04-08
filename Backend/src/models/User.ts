@@ -49,11 +49,11 @@ User.init(
     },
     phoneNo: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     document: {
       type: DataTypes.STRING,

@@ -44,7 +44,7 @@ export function removeAppointment(
     return async (dispatch) => {
         dispatch(setLoading(true));
         try {
-            const response = await apiConnector("DELETE",`${REMOVE_APPOINTMENT} + /${appointmentId}`);
+            const response = await apiConnector("DELETE",`${REMOVE_APPOINTMENT}/${appointmentId}`);
             console.log("REMOVE_APPOINTMENT API RESPONSE............", response)
   
             if (!response.data.success) {
