@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../Models/User';
+import OTP from '../Models/OTP';
+import { Op } from 'sequelize';
 
 
 interface UserType {
@@ -21,33 +23,44 @@ interface UserType {
 
 const SignUp = async (req: Request, res: Response) => {
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        const newUser: UserType = await User.create({
+        const { password, email, otp, role} = req.body;
+
+        const otpEntry = await OTP.findOne({
+            where: {
+                email,
+                otp,
+                createdAt: {
+                    [Op.gt]: new Date(new Date().getTime() - 5 * 60 * 1000),
+                },
+            },
+        });
+
+        if (!otpEntry) {
+            return res.status(400).json({ message: 'Invalid OTP or OTP expired.' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = await User.create({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            email: req.body.email,
+            email,
             password: hashedPassword,
-            phoneNo: req.body.phoneNo,
-            address: req.body.address,
-            role: req.body.role
+            role,
         });
-        
-        const token = jwt.sign({ userId: newUser.id,role: newUser.role,email: newUser.email }, 'your-secret-key', { expiresIn: '3d' });
+
+        await otpEntry.destroy();
+        const token = jwt.sign({ userId: newUser.id, email: newUser.email, role: newUser.role }, 'your-secret-key', { expiresIn: '3d' });
         res.setHeader('Authorization', `Bearer ${token}`);
-
-        res.status(201).json({ message: 'User created successfully', token });
-
+        res.status(200).json({ message: 'User created successfully.', token });
     } catch (error) {
-        res.status(500).json({ error });
+        console.error('Error signing up user:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 const login = async (req: Request, res: Response) => {
     try {
-        const { password, confirmPassword } = req.body;
-        if(password != confirmPassword){
-            return res.status(500).json({ message: 'Password does not match.' });
-        }
 
         const user: UserType | null = await User.findOne({ where: { email: req.body.email } });
         if (!user) {
@@ -56,16 +69,47 @@ const login = async (req: Request, res: Response) => {
 
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
         if (!passwordMatch) {
+            console.log("Password does not match");
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
         const token = jwt.sign({ userId: user.id,role: user.role,email: user.email }, 'your_secret_key');
         res.setHeader('Authorization', `Bearer ${token}`);
 
-        res.status(200).json({ message: 'Login successful', token: token });
+		user.password = '';
+		const options = {
+			expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+			httpOnly: true,
+		};
+
+		res.cookie("token", token, options).status(200).json({
+			success: true,
+			token,
+			user,
+			message: `User Login Success`,
+		});
     } catch (error) {
         res.status(500).json({ error });
     }
 };
 
-export { SignUp, login };
+const sendOtp = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+        const otp = Math.floor(100000 + Math.random() * 900000);
+        await OTP.create({
+            email,
+            otp
+        });
+
+        return res.status(200).json({ success: true, message: 'OTP created and verification email sent successfully' });
+    } catch (error) {
+        console.error('Error creating OTP and sending email:', error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+}
+
+
+
+
+export { SignUp, login, sendOtp };

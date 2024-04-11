@@ -5,16 +5,42 @@ import { Link } from 'react-router-dom';
 import Loader from "./Loader"
 import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
+import { useDispatch , useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { ACCOUNT_TYPE } from '../../utils/constants';
+import Tab from '../Buttons/Tab';
+import { sendOtp } from '../../services/Operations/authAPI';
+import { setSignupData } from '../../slices/authSlice';
 
 const Signup = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [accountType, setAccountType] = useState(ACCOUNT_TYPE.PATIENT)
     const initialMotion = {x: 300, opacity : 0};
     const finalMotion = {x : 0, opacity:1};
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { loading } = useSelector((state) => state.auth);
+    
+    const onSubmit = (data) => {
+        dispatch(setSignupData({firstName: data.firstName,lastName: data.lastName,email: data.email,password: data.password,role: accountType}));
+        dispatch(sendOtp(data.email,navigate));  
+    };
+    const tabData = [
+        {
+          id: 1,
+          tabName: "Patient",
+          type: ACCOUNT_TYPE.PATIENT,
+        },
+        {
+          id: 2,
+          tabName: "Doctor",
+          type: ACCOUNT_TYPE.DOCTOR,
+        },
+    ]
 
-    const onSubmit = (data) => console.log(data);
     return (
+        !loading ? (
+        
         <div className='h-[100vh] w-full flex justify-center items-center'>
             <section>
                 <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -52,7 +78,7 @@ const Signup = () => {
                                                 placeholder="First Name"
                                                 id="firstName"
                                                 {...register("firstName", { required: true })}
-                                            ></input>
+                                            ></input> 
                                         </div>
                                     </motion.div>
                                     <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 0.9}} >
@@ -103,6 +129,9 @@ const Signup = () => {
                                         </div>
                                     </motion.div>
                                     <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 1.5}} >
+                                        <Tab tabData={tabData} field={accountType} setField={setAccountType} />
+                                    </motion.div>
+                                    <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 1.7}} >
                                         <button
                                             type="submit"
                                             className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
@@ -142,7 +171,9 @@ const Signup = () => {
                     </div>
                 </div>
             </section>
-        </div>
+        </div> )
+        : 
+        (<Loader/>)
     )
 }
 
