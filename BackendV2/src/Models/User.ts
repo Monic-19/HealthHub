@@ -14,7 +14,6 @@ class User extends Model {
   public dob!: Date | null;
   public gender!: string | null;
   public bloodGroup!: string | null;
-  public documentId!: number | null;
   public addressId!: number | null; 
   public role!: 'Doctor' | 'Patient' | 'Admin';
 }
@@ -66,13 +65,9 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    documentId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: Document,
-        key: 'id'
-      },
+    role: {
+      type: DataTypes.ENUM('Doctor', 'Patient', 'Admin'),
+      allowNull: false,
     },
     addressId: {
       type: DataTypes.INTEGER,
@@ -81,10 +76,6 @@ User.init(
         model: Address,
         key: 'id',
       },
-    },
-    role: {
-      type: DataTypes.ENUM('Doctor', 'Patient', 'Admin'),
-      allowNull: false,
     },
   },
   {

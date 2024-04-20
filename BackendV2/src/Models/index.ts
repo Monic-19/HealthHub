@@ -30,9 +30,10 @@ db.Appointment = Appointment;
 db.Address = Address;
 db.OTP = OTP;
 
-export async function  sync_models(){
+export async function  sync_models() {
   db.sequelize.sync({ force: false, alter: false }).then(() => {
-	console.log(` Database Synced...`)
+	console.log(`Database Synced...`)
   })
 }
+
 export default db;

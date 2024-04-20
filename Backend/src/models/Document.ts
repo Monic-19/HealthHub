@@ -2,7 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../Config/sequelize';
 import User from './User';
 
-class Documents extends Model {
+class Document extends Model {
     public id!: number;
     public userId!: number;
     public documentUrl!: string;
@@ -10,7 +10,7 @@ class Documents extends Model {
     public description!: string;
 }
 
-Documents.init(
+Document.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -40,4 +40,4 @@ Documents.init(
     }
 );
 
-export default Documents;
+export default Document;

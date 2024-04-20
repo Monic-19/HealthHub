@@ -12,11 +12,13 @@
   "dependencies": {
     "@material-tailwind/react": "^2.1.9",
     "@reduxjs/toolkit": "^2.2.3",
+    "apexcharts": "^3.48.0",
     "axios": "^1.6.8",
     "framer-motion": "^11.0.10",
     "gsap": "^3.12.5",
     "inline-css": "^4.0.2",
     "react": "^18.2.0",
+    "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.2",
     "react-hot-toast": "^2.4.1",

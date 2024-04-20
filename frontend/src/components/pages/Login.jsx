@@ -1,22 +1,24 @@
 import React, { useState } from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {motion} from "framer-motion";
 import { FaHome } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { login } from '../../services/Operations/authAPI';
+import { useNavigate } from "react-router-dom";
+
 
 
 const Login = () => {
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
     const initialMotion = {y: 40, sacle : 0, opacity : 0};
     const finalMotion = {y : 0, scale : 1,opacity : 1};
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const onSubmit = (data) => {
-        dispatch(login(data.email,data.password));
+        dispatch(login(data.email,data.password,navigate));
     }
     return (
         <div className='h-[100vh] w-full flex justify-center items-center'>

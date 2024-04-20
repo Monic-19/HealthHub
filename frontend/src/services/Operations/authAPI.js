@@ -4,7 +4,6 @@ import { authEndpoints } from '../apis';
 import { apiConnector } from "../apiconnector";
 import { setToken, setSignupData } from "../../slices/authSlice";
 
-
 const {SIGNUP_API,LOGIN_API,SENDOTP} = authEndpoints;
 
 export function signUp(
@@ -49,7 +48,7 @@ export function signUp(
 export function login(
     email,
     password,
-    confirmPassword
+    navigate
 ) {
     return async(dispatch) => {
       dispatch(setLoading(true));
@@ -57,7 +56,6 @@ export function login(
         const response = await apiConnector("POST", LOGIN_API, {
           email,
           password,
-          confirmPassword
         });
 
         if (response.status != 200) {
@@ -69,6 +67,7 @@ export function login(
         localStorage.setItem('token',JSON.stringify(response.data.token));
 
         toast.success("Login Successful");
+        navigate(`/${response.data.user.role.toLowerCase()}`);
       } catch(error){
         console.log("Login API ERROR............", error)
         toast.error("Login Failed")

@@ -10,14 +10,14 @@ interface UserType {
     id: number;
     firstName: string;
     lastName: string;
-    profileImg: string;
+    profileImg: string | null;
     email: string;
     password: string;
-    phoneNo: string;
-    address: string;
-    gender: string;
-    bloodGroup: string;
-    document: string;
+    phoneNo: string | null;
+    dob: Date | null;
+    gender: string | null;
+    bloodGroup: string | null;
+    addressId: number | null; 
     role: 'Doctor' | 'Patient' | 'Admin';
 }
 
@@ -55,7 +55,7 @@ const SignUp = async (req: Request, res: Response) => {
         res.status(200).json({ message: 'User created successfully.', token });
     } catch (error) {
         console.error('Error signing up user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error while SignUp' });
     }
 };
 
@@ -108,8 +108,6 @@ const sendOtp = async (req: Request, res: Response) => {
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 }
-
-
 
 
 export { SignUp, login, sendOtp };

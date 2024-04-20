@@ -5,83 +5,74 @@ import {
   Typography,
   IconButton,
 } from "@material-tailwind/react";
+import {
+  Tabs,
+  TabsHeader,
+  Tab,
+} from "@material-tailwind/react";
 import { FaBars } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
- 
+
 function NavList() {
   return (
-    <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-        <NavLink to={"/doctor/profile"} className="flex items-center hover:text-black hover:font-bold transition-colors">
-          Profile
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-       <NavLink to={"/doctor/info"} className="flex items-center hover:text-black hover:font-bold transition-colors">
-          Information
-        </NavLink>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-        <a href="#" className="flex items-center hover:text-black hover:font-bold  transition-colors">
-          Blocks
-        </a>
-      </Typography>
-      <Typography
-        as="li"
-        variant="small"
-        color="blue-gray"
-        className="p-1 font-medium"
-      >
-        <a href="#" className="flex items-center hover:text-black hover:font-bold  transition-colors">
-          Docs
-        </a>
-      </Typography>
-    </ul>
+    <>
+      <Tabs value="df">
+        <TabsHeader className="lg:w-[50vw] w-full">
+
+          
+            <NavLink to={"/doctor/profile"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
+            <Tab value={"Profile"}>Profile</Tab>
+            </NavLink>
+          
+
+          
+            <NavLink to={"/doctor/info"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
+            <Tab value={"Information"}>Information </Tab>
+            </NavLink>
+         
+
+          
+            <NavLink to={"/doctor/appointments"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
+            <Tab value={"Appointments"}>Appointments</Tab>
+            </NavLink>
+          
+
+          
+            <NavLink to={"/doctor/stats"} className="flex items-center hover:text-black hover:font-bold  transition-colors w-[25vw] lg:w-[12vw]">
+            <Tab value={"Stats"}>Stats</Tab>
+            </NavLink>
+          
+        </TabsHeader>
+      </Tabs>
+    </>
   );
 }
- 
+
 const DoctorNavbar = () => {
   const [openNav, setOpenNav] = React.useState(false);
- 
+
   const handleWindowResize = () =>
     window.innerWidth >= 960 && setOpenNav(false);
- 
+
   useEffect(() => {
     window.addEventListener("resize", handleWindowResize);
- 
+
     return () => {
       window.removeEventListener("resize", handleWindowResize);
     };
   }, []);
 
   const [doctorName, setDoctorName] = useState("ram lal")
- 
+
   return (
     <Navbar className="mx-auto max-w-screen-xl px-6 py-3">
       <div className="flex items-center justify-between text-blue-gray-900">
         <Typography
-          as="a"
-          href="#"
           variant="h6"
           className="mr-4 cursor-pointer py-1.5"
         >
-          Dr. {doctorName}
+          <NavLink to={"/doctor"}>Dr. {doctorName}</NavLink>
         </Typography>
         <div className="hidden lg:block">
           <NavList />

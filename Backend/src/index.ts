@@ -2,10 +2,6 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { sync_models } from "./Models/index";
 import { sequelize } from "./Config/sequelize";
-import appointmentRouter from './Route/appointment.route';
-import authRouter from './Route/auth.route';
-import documentRouter from './Route/document.route';
-import userRouter from './Route/user.route';
 import dotenv from 'dotenv';
 
 
@@ -22,12 +18,6 @@ async function main(){
     
     await sequelize.authenticate();
     sync_models();
-
-    app.use('/api/v1/appointments',appointmentRouter);
-    app.use('/api/v1/auth',authRouter);
-    app.use('/api/v1/documents',documentRouter);
-    app.use('/api/v1/users',userRouter);
-
 
     app.get('/', (req: Request, res: Response) => {
       res.send('Hello World');
