@@ -44,21 +44,21 @@ export const getDocumentHistoryForUser = async (req: Request, res: Response) => 
 };
 
 export const deleteDocumentById = async (req: Request, res: Response) => {
-    try {
-      const documentId = req.params.documentId;  
-      if (!documentId) {
-        return res.status(400).json({ error: 'Document ID is required' });
-      }  
-      const document = await Document.findByPk(documentId);  
-      if (!document) {
-        return res.status(404).json({ error: 'Document not found' });
-      }  
-      await document.destroy();
-  
-      res.json({ message: 'Document deleted successfully' });
-    } catch (error) {
-      console.error('Error deleting document:', error);
-      res.status(500).json({ error: 'Server error' });
-    }
+  try {
+    const documentId = req.params.documentId;  
+    if (!documentId) {
+      return res.status(400).json({ error: 'Document ID is required' });
+    }  
+    const document = await Document.findByPk(documentId);  
+    if (!document) {
+      return res.status(404).json({ error: 'Document not found' });
+    }  
+    await document.destroy();
+
+    res.json({ message: 'Document deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting document:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
 };
 

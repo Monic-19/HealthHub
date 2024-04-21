@@ -8,7 +8,6 @@ const PatientInfo = () => {
   const onSubmit = (data) => {
     console.log(data); 
   };
-  const [address, setAddress] = useState('');
   return (
     <div className='p-6'>
        <motion.div

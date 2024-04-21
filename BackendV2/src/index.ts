@@ -6,6 +6,7 @@ import authRouter from './Routes/auth.route';
 import documentRouter from './Routes/document.route';
 import addressRouter from './Routes/address.route';
 import doctorRouter from './Routes/doctor.route';
+import InformationRouter from './Routes/information.route';
 import dotenv from 'dotenv';
 
 
@@ -27,6 +28,7 @@ async function main(){
       app.use('/api/v1/documents', documentRouter);
       app.use('/api/v1/doctor', doctorRouter);
       app.use('/api/v1/address', addressRouter);
+      app.use('/api/v1/personal-info', InformationRouter);
   
       app.get('/', (req: Request, res: Response) => {
         res.send('Hello World');
