@@ -13,6 +13,7 @@ import {
 import { FaBars } from "react-icons/fa6";
 import { RxCross1 } from "react-icons/rx";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function NavList() {
   return (
@@ -51,6 +52,7 @@ function NavList() {
 
 const DoctorNavbar = () => {
   const [openNav, setOpenNav] = React.useState(false);
+  const user = useSelector((state) => state.profile.user);
 
   const handleWindowResize = () =>
     window.innerWidth >= 960 && setOpenNav(false);
@@ -63,7 +65,7 @@ const DoctorNavbar = () => {
     };
   }, []);
 
-  const [doctorName, setDoctorName] = useState("ram lal")
+  const [doctorName, setDoctorName] = useState(`${user.firstName} ${user.lastName}`)
 
   return (
     <Navbar className="mx-auto max-w-screen-xl px-6 py-3">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, useNavigate, Outlet } from 'react-router-dom'
 import Navbar from '../pages/Navbar'
 import DoctorNavbar from './DoctorNavbar'
 import DoctorDashboardLeft from "./DoctorDashboardLeft"
@@ -8,24 +8,31 @@ import { FaClock } from "react-icons/fa6";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 import { Button } from "@material-tailwind/react";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { useDispatch } from 'react-redux'
+import { logout } from '../../services/Operations/authAPI'
 
 const DoctorDashboard = () => {
   const [dateTime, setDateTime] = useState(new Date());
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const interval = setInterval(() => {
       setDateTime(new Date());
     }, 1000);
-
+    
     return () => clearInterval(interval);
   }, []);
-
+  
   const day = dateTime.toLocaleDateString('en-US', { weekday: 'long' });
   const date = dateTime.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const time = dateTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true });
-
+  
   const [verified, setVerified] = useState(true);
-
+  const handleLogout = () => {
+    dispatch(logout(navigate));
+  }
+  
   return (
     <>
       <Navbar></Navbar>
@@ -102,7 +109,7 @@ const DoctorDashboard = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1.5 }}
                   className="bg-white rounded-lg h-[10vh] w-[50%] lg:mt-[5vh] mt-[3vh] lg:ml-[7vw] ml-[25vw] shadow-lg flex justify-center items-center  ">
-                  <Button className="w-[70%] text-lg font-mono font-bold">Logout</Button>
+                  <Button className="w-[70%] text-lg font-mono font-bold" onClick={handleLogout}>Logout</Button>
                 </motion.div>
 
               </div>

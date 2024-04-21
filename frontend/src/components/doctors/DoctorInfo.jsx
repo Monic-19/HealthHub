@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
-import { motion } from "framer-motion"
 import { useForm } from "react-hook-form";
 
 const DoctorInfo = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const onClickSubmit = (e) => {
-    e.preventDefault();
-    alert("form is submitted")
+  const onClickSubmit = (data) => {
+    console.log(data);
   };
 
   return (
@@ -18,38 +16,8 @@ const DoctorInfo = () => {
 
       <div
         className=" h-[67vh] w-full flex justify-center">
-        <form className="mt-8 mb-2 w-full sm:w-96 overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm flex-grow px-2">
+        <form className="mt-8 mb-2 w-full sm:w-96 overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm flex-grow px-2" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-4">
-            <div>
-              Personal Information
-            </div>
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              First Name
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="First Name"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("fname", { required: true })}
-            />
-            {errors.fname && <span>This field is required</span>}
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Last Name
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="Last Name"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("lname", { required: true })}
-            />
-            {errors.lname && <span>This field is required</span>}
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Phone Number
@@ -134,28 +102,12 @@ const DoctorInfo = () => {
             </select>
             {errors.bloodGroup && <span>This field is required</span>}
 
-            <div>
-              Enter your clinic information
-            </div>
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Clinic Name
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="clinic name"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("clinicName", { required: true })}
-            />
-            {errors.clinicName && <span>This field is required</span>}
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Pincode
             </Typography>
             <Input
+              type="number"
               size="lg"
               placeholder="Pincode"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -170,6 +122,7 @@ const DoctorInfo = () => {
               Building/House no./Flat/Other
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="building"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -184,6 +137,7 @@ const DoctorInfo = () => {
               Area
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="area"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -198,6 +152,7 @@ const DoctorInfo = () => {
               Landmark
             </Typography>
             <Input
+              type='text'
               size="lg"
               placeholder="landmark"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -211,6 +166,7 @@ const DoctorInfo = () => {
               Town City
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="towncity"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -224,6 +180,7 @@ const DoctorInfo = () => {
               State
             </Typography>
             <Input
+              type='text'
               size="lg"
               placeholder="state"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -234,49 +191,10 @@ const DoctorInfo = () => {
             />
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Fees per visit
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="Rs. 500"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("fee")}
-            />
-
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Opening Hour
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="Opening Hour"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("openingHour")}
-            />
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Closing Hour
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="Closing Hour"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              {...register("closingHour")}
-            />
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
               Education
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="Education"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -300,6 +218,7 @@ const DoctorInfo = () => {
               Experience
             </Typography>
             <Input
+              type="number"
               size="lg"
               placeholder="Experience in Years"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -314,6 +233,7 @@ const DoctorInfo = () => {
               Speciality
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="Specialty In Field"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -328,6 +248,7 @@ const DoctorInfo = () => {
               Medical Field
             </Typography>
             <Input
+              type="text"
               size="lg"
               placeholder="Medical Fields"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -339,7 +260,7 @@ const DoctorInfo = () => {
 
           </div>
 
-          <Button className="mt-6" fullWidth>
+          <Button type="submit" className="mt-6" fullWidth>
             Submit
           </Button>
 

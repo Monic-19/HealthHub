@@ -1,12 +1,14 @@
 import React from 'react'
 import {Tabs,TabsHeader,Tab,} from "@material-tailwind/react";
 import { NavLink, Outlet } from 'react-router-dom';
+import Navbar from '../pages/Navbar';
 
 const PatientDashboard = () => {
     return (
+      <>
+            <Navbar/>
         <div className=' bg-blue-gray-100 h-[100vh] w-full p-5'>
 
-            <h1 className='text-3xl font-mono font-bold leading-loose'>Patient Dashboard</h1>
 
             <div >
                 <Tabs value="df">
@@ -39,11 +41,12 @@ const PatientDashboard = () => {
                 </Tabs>
             </div>
 
-            <div className='h-[70vh] lg:w-[80vw] w-full  ml-[0vw] lg:ml-[10vw] mt-[5vh] overflow-y-scroll bg-red-200 patient-outlet  rounded-xl'>
+            <div className='h-[70vh] lg:w-[80vw] w-full  ml-[0vw] lg:ml-[10vw] mt-[5vh] patient-outlet  rounded-xl'>
                 <Outlet></Outlet>
             </div>
 
         </div>
+      </>
     )
 }
 

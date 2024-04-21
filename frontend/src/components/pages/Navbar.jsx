@@ -2,6 +2,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Link, NavLink } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 const Navbar = () => {
@@ -12,6 +13,9 @@ const Navbar = () => {
   const subtrans = { delay: 0.4 }
   const final = { y: "0vh" }
   const navigate = useNavigate();
+  const token = useSelector((state) => state.auth.token);
+  const user = useSelector((state) => state.profile.user);
+  
 
   return (
     <motion.div initial={initial} animate={final} transition={{ duration: 0.3, ease: "easeIn" }} className='h-[24vh] px-4 flex justify-center items-center border-b-2 border-black lg:h-[9vh] lg:justify-between flex-wrap'>
@@ -22,7 +26,12 @@ const Navbar = () => {
         <NavLink to={"/"} className='hover:font-extrabold'>Home</NavLink>
         <NavLink to={"/about"} className='hover:font-extrabold'>About</NavLink>
         <NavLink to={"/appointment/all"} className='hover:font-extrabold'>Appointment</NavLink>
-        <NavLink to="/login" className='hover:font-extrabold'>Login</NavLink>
+        {
+          token && <NavLink to={`/${user.role}/profile`} className='hover:font-extrabold'>Dashboard</NavLink> 
+        }
+        {
+          !token && <NavLink to="/login" className='hover:font-extrabold'>Login</NavLink>
+        }
       </motion.div>
       
       <NavLink to={"/contact"} className='lg:mr-7 font-extrabold font-mono text-2xl cursor-pointer '>Contact</NavLink>

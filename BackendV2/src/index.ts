@@ -4,6 +4,8 @@ import { sync_models } from "./Models/index";
 import { sequelize } from "./Config/sequelize";
 import authRouter from './Routes/auth.route';
 import documentRouter from './Routes/document.route';
+import addressRouter from './Routes/address.route';
+import doctorRouter from './Routes/doctor.route';
 import dotenv from 'dotenv';
 
 
@@ -23,6 +25,8 @@ async function main(){
       // Routes
       app.use('/api/v1/auth', authRouter);
       app.use('/api/v1/documents', documentRouter);
+      app.use('/api/v1/doctor', doctorRouter);
+      app.use('/api/v1/address', addressRouter);
   
       app.get('/', (req: Request, res: Response) => {
         res.send('Hello World');

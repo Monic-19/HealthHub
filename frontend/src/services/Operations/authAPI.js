@@ -3,6 +3,7 @@ import { setLoading } from "../../slices/authSlice";
 import { authEndpoints } from '../apis';
 import { apiConnector } from "../apiconnector";
 import { setToken, setSignupData } from "../../slices/authSlice";
+import { setUser } from "../../slices/profileSlice";
 
 const {SIGNUP_API,LOGIN_API,SENDOTP} = authEndpoints;
 
@@ -64,6 +65,8 @@ export function login(
         
         console.log(response);
         dispatch(setToken(response.data.token));
+        dispatch(setUser(response.data.user));
+        localStorage.setItem('user',JSON.stringify(response.data.user));
         localStorage.setItem('token',JSON.stringify(response.data.token));
 
         toast.success("Login Successful");
@@ -101,4 +104,16 @@ export function sendOtp(
     }
     dispatch(setLoading(false));
   }
+}
+
+export function logout(navigate) {
+  return (dispatch) => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+
+    dispatch(setToken(null));
+    dispatch(setUser(null)); 
+
+    navigate("/");
+  };
 }
