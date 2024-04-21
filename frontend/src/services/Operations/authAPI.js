@@ -70,7 +70,7 @@ export function login(
         localStorage.setItem('token',JSON.stringify(response.data.token));
 
         toast.success("Login Successful");
-        navigate(`/${response.data.user.role.toLowerCase()}`);
+        navigate(`/${response.data.user.role.toLowerCase()}/profile`);
       } catch(error){
         console.log("Login API ERROR............", error)
         toast.error("Login Failed")

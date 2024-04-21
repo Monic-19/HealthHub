@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion"
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
+import { useForm } from 'react-hook-form';
 
 const PatientInfo = () => {
-  const [name, setName] = useState('');
-  const [profilePhoto, setProfilePhoto] = useState('');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  const onSubmit = (data) => {
+    console.log(data); 
+  };
   const [address, setAddress] = useState('');
   return (
-    <div className='p-5 '>
+    <div className='p-6'>
        <motion.div
         initial={{ x : -300, opacity : 0}}
         animate={{ x : 0, opacity : 1 }}
@@ -18,61 +20,178 @@ const PatientInfo = () => {
 
         <form className=" mb-2 p-4 w-[90vw] max-w-screen-lg sm:w-[35vw] overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm bg-white h-[65vh]">
           <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Your Name
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="name"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Your Phone Number
-            </Typography>
-            <Input
-              type="tel"
-              size="lg"
-              placeholder="9999888777"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              onChange={(e) => setMobileNumber(e.target.value)}
-              value={mobileNumber}
-            />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Profile Photo
-            </Typography>
-            <Input
-              type="file"
-              size="lg"
-              onChange={(e) => setProfilePhoto(e.target.value)}
-              value={profilePhoto}
-            />
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Your Address
-            </Typography>
-            <Input
-              size="lg"
-              placeholder="address"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
-            />
-
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Phone Number
+              </Typography>
+              <Input
+                type="tel"
+                size="lg"
+                placeholder="9999888777"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("mobileNumber", { required: true })}
+              />
+              {errors.mobileNumber && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Profile Photo
+              </Typography>
+              <Input
+                type="file"
+                size="lg"
+                {...register("profilePhoto")}
+              />
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Email
+              </Typography>
+              <Input
+                type="email"
+                size="lg"
+                {...register("email", { required: true })}
+              />
+              {errors.email && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                DOB
+              </Typography>
+              <Input
+                type="date"
+                size="lg"
+                {...register("dob", { required: true })}
+              />
+              {errors.dob && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Gender
+              </Typography>
+              <select
+                name="gender"
+                id="gender"
+                {...register("gender", { required: true })}
+                size="lg"
+                className="border border-gray-400 focus:!border-t-gray-900 p-3 rounded-lg"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              {errors.gender && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Blood Group
+              </Typography>
+              <select
+                name="bloodGroup"
+                id="bloodGroup"
+                {...register("bloodGroup", { required: true })}
+                size="lg"
+                className="border border-gray-400 focus:!border-t-gray-900 p-3 rounded-lg"
+              >
+                <option value="">Select Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+              {errors.bloodGroup && <span>This field is required</span>}
+      
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Pincode
+              </Typography>
+              <Input
+                type="number"
+                size="lg"
+                placeholder="Pincode"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("pincode", { required: true })}
+              />
+              {errors.pincode && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Building/House no./Flat/Other
+              </Typography>
+              <Input
+                type="text"
+                size="lg"
+                placeholder="building"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("building", { required: true })}
+              />
+              {errors.building && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Area
+              </Typography>
+              <Input
+                type="text"
+                size="lg"
+                placeholder="area"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("area", { required: true })}
+              />
+              {errors.area && <span>This field is required</span>}
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Landmark
+              </Typography>
+              <Input
+                type='text'
+                size="lg"
+                placeholder="landmark"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("landmark")}
+              />
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                Town City
+              </Typography>
+              <Input
+                type="text"
+                size="lg"
+                placeholder="towncity"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("townCity")}
+              />
+      
+              <Typography variant="h6" color="blue-gray" className="-mb-3">
+                State
+              </Typography>
+              <Input
+                type='text'
+                size="lg"
+                placeholder="state"
+                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                labelProps={{
+                  className: "before:content-none after:content-none",
+                }}
+                {...register("state")}
+              />
           </div>
-
-
-
+          
           <Button className="mt-6" fullWidth>
             Submit
           </Button>
