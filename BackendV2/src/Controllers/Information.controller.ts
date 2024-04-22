@@ -234,4 +234,4 @@ const getPatientInformation = async(req: Request, res: Response) => {
     }
 } 
 
-export { saveDoctorInformation, savePatientInformation };
+export { saveDoctorInformation, savePatientInformation, getPatientInformation, getDoctorInformation };

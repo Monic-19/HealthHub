@@ -2,12 +2,18 @@ import React, { useState } from 'react'
 import { motion } from "framer-motion"
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { savePatientInformation } from '../../services/Operations/personal_InformationAPI';
 
 const PatientInfo = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-  const onSubmit = (data) => {
-    console.log(data); 
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.user);
+  
+  const onClickSubmit = (data) => {
+    dispatch(savePatientInformation(user.id,data));
   };
+
   return (
     <div className='p-6'>
        <motion.div
@@ -17,7 +23,7 @@ const PatientInfo = () => {
         className=" h-[67vh] w-[100%] flex justify-center">
           <div>
 
-        <form className=" mb-2 p-4 w-[90vw] max-w-screen-lg sm:w-[35vw] overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm bg-white h-[65vh]">
+        <form className=" mb-2 p-4 w-[90vw] max-w-screen-lg sm:w-[35vw] overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm bg-white h-[65vh]" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-6">
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Phone Number
@@ -30,7 +36,7 @@ const PatientInfo = () => {
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
-                {...register("mobileNumber", { required: true })}
+                {...register("phoneNo", { required: true })}
               />
               {errors.mobileNumber && <span>This field is required</span>}
       
@@ -42,16 +48,6 @@ const PatientInfo = () => {
                 size="lg"
                 {...register("profilePhoto")}
               />
-      
-              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Email
-              </Typography>
-              <Input
-                type="email"
-                size="lg"
-                {...register("email", { required: true })}
-              />
-              {errors.email && <span>This field is required</span>}
       
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 DOB
@@ -191,7 +187,7 @@ const PatientInfo = () => {
               />
           </div>
           
-          <Button className="mt-6" fullWidth>
+          <Button type='submit' className="mt-6" fullWidth>
             Submit
           </Button>
 

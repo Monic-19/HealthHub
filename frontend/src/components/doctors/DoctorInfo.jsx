@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { saveDoctorInformation } from "../../services/Operations/personal_InformationAPI";
 
 const DoctorInfo = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.user);
   const onClickSubmit = (data) => {
-    console.log(data);
+    dispatch(saveDoctorInformation(user.id,data));
   };
 
   return (
@@ -30,9 +34,9 @@ const DoctorInfo = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              {...register("mobileNumber", { required: true })}
+              {...register("phoneNo", { required: true })}
             />
-            {errors.mobileNumber && <span>This field is required</span>}
+            {errors.phoneNo && <span>This field is required</span>}
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Profile Photo
@@ -42,16 +46,6 @@ const DoctorInfo = () => {
               size="lg"
               {...register("profilePhoto")}
             />
-
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Email
-            </Typography>
-            <Input
-              type="email"
-              size="lg"
-              {...register("email", { required: true })}
-            />
-            {errors.email && <span>This field is required</span>}
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               DOB
@@ -210,7 +204,7 @@ const DoctorInfo = () => {
             <Input
               type="file"
               size="lg"
-              {...register("educationProof")}
+              {...register("degree")}
             />
 
 
@@ -240,7 +234,7 @@ const DoctorInfo = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              {...register("specialty")}
+              {...register("specialization")}
             />
 
 
