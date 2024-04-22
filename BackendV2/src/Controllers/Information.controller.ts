@@ -166,4 +166,72 @@ const savePatientInformation = async (req: Request, res: Response) => {
     }
 }
 
+const getDoctorInformation = async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId;
+        const user = await User.findByPk(userId);
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User does not exist',
+            });
+        }
+
+        const doctor = await Doctor.findOne({
+            where: { userId },
+            include: [
+                {
+                    model: User,
+                    include: [Address],
+                },
+            ],
+        });
+        
+        if (!doctor) {
+            return res.status(404).json({
+                success: false,
+                error: 'Doctor information not found for the provided userId',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: user,
+            doctor: doctor,
+        });
+    } catch (error) {
+        console.error('Error fetching doctor information:', error);
+        return res.status(500).json({
+            success: false,
+            error: 'Internal server error',
+        });
+    }
+};
+
+const getPatientInformation = async(req: Request, res: Response) => {
+    try{
+        const userId = req.params.userId;
+        const user = await User.findByPk(userId);
+        
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User does not exist',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            user: user,
+        });
+    } catch(error){
+        console.error('Error fetching patient information:', error);
+        return res.status(500).json({
+            success: false,
+            error: 'Internal server error',
+        });
+    }
+} 
+
 export { saveDoctorInformation, savePatientInformation };
