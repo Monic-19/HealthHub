@@ -23,6 +23,7 @@ import AdminStats from './components/admin/AdminStats'
 import AdminDoctorsList from './components/admin/AdminDoctorsList'
 import AdminAllDoctorLists from './components/admin/AdminAllDoctorLists'
 import VerifyEmail from './components/pages/VerifyEmail'
+import DoctorClinicInfo from './components/doctors/DoctorClinicInfo'
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
             <Route path='info' element={<DoctorInfo/>}></Route>
             <Route path='appointments' element={<DoctorAppointments/>}></Route>
             <Route path='stats' element={<Stats/>}></Route>
+            <Route path='clinic' element={<DoctorClinicInfo/>}></Route>
           </Route>
 
           <Route path='/admin' element={<AdminDashboard/>} >

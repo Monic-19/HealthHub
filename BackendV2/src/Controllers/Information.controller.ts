@@ -3,6 +3,7 @@ import Address from "../Models/Address";
 import User from "../Models/User";
 import Doctor from "../Models/Doctor";
 import { sequelize } from "../Config/sequelize";
+import Clinic from "../Models/Clinic";
 
 const saveDoctorInformation = async (req: Request, res: Response) => {
     // Start an Transaction... 
@@ -166,6 +167,82 @@ const savePatientInformation = async (req: Request, res: Response) => {
     }
 }
 
+const saveClinicInformation = async (req: Request, res: Response) => {
+    const transaction = await sequelize.transaction();
+    try{
+        const { userId , name, fee, openingTime, closingTime, pincode, building, area, landmark, townCity, state } = req.body;
+        const user = await User.findByPk(userId, { transaction });
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: 'User does not exist',
+            });
+        }
+
+        const address = await Address.create({
+            pincode,
+            building,
+            area,
+            landmark,
+            townCity,
+            state
+        }, { transaction });
+        
+        const clinic = await Clinic.create({
+            name,
+            addressId: address.id,
+            fee,
+            openingTime,
+            closingTime,
+            userId,
+        }, { transaction });
+
+        await transaction.commit();
+        return res.status(200).json({
+            success: true,
+            message: 'Clinic information saved successfully',
+        });
+    }catch(error) {
+        console.error('Error saving clinic information:', error);
+        return res.status(500).json({
+            success: false,
+            error: 'Internal server error',
+        });
+    }
+}
+
+const getClinicInformation = async (req, res) => {
+    try {
+        const clinics = await Clinic.findAll({
+            include: [
+                {
+                    model: Address,
+                    attributes: ['pincode', 'building', 'area', 'landmark', 'townCity', 'state'],
+                },
+            ],
+        });
+
+        if (!clinics || clinics.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No clinic information found',
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            clinics,
+        });
+    } catch (error) {
+        console.error('Error fetching clinic information:', error);
+        return res.status(500).json({
+            success: false,
+            error: 'Internal server error',
+        });
+    }
+};
+
+
 const getDoctorInformation = async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId;
@@ -234,4 +311,4 @@ const getPatientInformation = async(req: Request, res: Response) => {
     }
 } 
 
-export { saveDoctorInformation, savePatientInformation, getPatientInformation, getDoctorInformation };
+export { saveDoctorInformation, savePatientInformation, saveClinicInformation , getPatientInformation, getDoctorInformation, getClinicInformation };

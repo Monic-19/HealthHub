@@ -29,10 +29,13 @@ function NavList() {
 
           
             <NavLink to={"/doctor/info"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
-            <Tab value={"Information"}>Information </Tab>
+            <Tab value={"Information"}>Personal Information </Tab>
+            </NavLink>
+
+            <NavLink to={"/doctor/clinic"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[20vw]">
+            <Tab value={"Clinic_Information"}>Clinic Information </Tab>
             </NavLink>
          
-
           
             <NavLink to={"/doctor/appointments"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
             <Tab value={"Appointments"}>Appointments</Tab>
