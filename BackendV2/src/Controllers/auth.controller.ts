@@ -109,5 +109,28 @@ const sendOtp = async (req: Request, res: Response) => {
     }
 }
 
+const verificationEmail = async (req: Request, res: Response) => {
+    try{
+        const { email } = req.body;
+        const user = await User.findOne(email);
 
-export { SignUp, login, sendOtp };
+        if(!user){
+            return res.status(200).json({
+                message: 'User Does not exists',
+                bool: false,
+            });
+        } else {
+            return res.status(200).json({
+                message: 'User Does exists',
+                bool: true,
+            });
+        }
+    }catch(error){
+        return res.status(404).json({
+            message: 'Error while verifying Email',
+            error: error
+        })
+    }
+}
+
+export { SignUp, login, sendOtp, verificationEmail };

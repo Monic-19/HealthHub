@@ -5,7 +5,7 @@ import { apiConnector } from "../apiconnector";
 import { setToken, setSignupData } from "../../slices/authSlice";
 import { setUser } from "../../slices/profileSlice";
 
-const {SIGNUP_API,LOGIN_API,SENDOTP} = authEndpoints;
+const {SIGNUP_API,LOGIN_API,SENDOTP,VERIFY_EMAIL} = authEndpoints;
 
 export function signUp(
     firstName,
@@ -117,3 +117,13 @@ export function logout(navigate) {
     navigate("/");
   };
 }
+
+export const verifyEmailExistence = async (email) => {
+  try {
+    const response = await verificationEmail(email);
+    return response.bool;
+  } catch (error) {
+    console.error('Error while verifying email:', error);
+    throw new Error('Error while verifying email');
+  }
+};

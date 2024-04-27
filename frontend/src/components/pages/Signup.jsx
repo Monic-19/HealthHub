@@ -9,12 +9,14 @@ import { useDispatch , useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { ACCOUNT_TYPE } from '../../utils/constants';
 import Tab from '../Buttons/Tab';
-import { sendOtp } from '../../services/Operations/authAPI';
+import { sendOtp, verifyEmailExistence } from '../../services/Operations/authAPI';
 import { setSignupData } from '../../slices/authSlice';
+import toast from 'react-hot-toast';
 
 const Signup = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [accountType, setAccountType] = useState(ACCOUNT_TYPE.PATIENT)
+    const [accountType, setAccountType] = useState(ACCOUNT_TYPE.PATIENT);
+    const [submitClicked, setSubmitClicked] = useState(false);
     const initialMotion = {x: 300, opacity : 0};
     const finalMotion = {x : 0, opacity:1};
     const navigate = useNavigate();
@@ -22,8 +24,15 @@ const Signup = () => {
     const { loading } = useSelector((state) => state.auth);
     
     const onSubmit = (data) => {
-        dispatch(setSignupData({firstName: data.firstName,lastName: data.lastName,email: data.email,password: data.password,role: accountType}));
-        dispatch(sendOtp(data.email,navigate));  
+        if (submitClicked) {
+            const emailExists = verifyEmailExistence({email: data.email});
+            if(emailExists){
+                toast.error('User already exists with email')
+            } else {
+                dispatch(setSignupData({firstName: data.firstName,lastName: data.lastName,email: data.email,password: data.password,role: accountType}));
+                dispatch(sendOtp(data.email,navigate));  
+            }
+        }  
     };
     const tabData = [
         {
@@ -134,6 +143,7 @@ const Signup = () => {
                                     <motion.div initial={initialMotion}  animate={finalMotion} transition={{duration : 1.7}} >
                                         <button
                                             type="submit"
+                                            onClick={() => setSubmitClicked(true)}
                                             className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                                         >
                                             Create Account <FaArrowRightLong className="ml-2" size={16} />

@@ -3,7 +3,8 @@ const BASE_URL = 'http://localhost:8081/api/v1';
 export const authEndpoints = {
     SIGNUP_API: BASE_URL + "/auth/signup",
     LOGIN_API: BASE_URL + "/auth/login",
-    SENDOTP: BASE_URL + "/auth/sendotp",
+    SENDOTP: BASE_URL + "/auth/send-otp",
+    VERIFY_EMAIL: BASE_URL + "/auth/verify-email",
 }
 
 export const appointmentEndpoints = {
