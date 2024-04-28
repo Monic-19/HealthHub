@@ -9,18 +9,18 @@ const DoctorInfo = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.user);
   const onClickSubmit = (data) => {
-    dispatch(saveDoctorInformation(user.id,data));
+    dispatch(saveDoctorInformation(user.id, data));
   };
 
   return (
     <div
 
       className='h-[70vh] w-full'>
-      <h1 className='text-3xl p-5 font-mono h-[10vh] bg-gray-900 text-white'>Your Information</h1>
+      <h1 className='text-3xl p-5 font-mono h-[10vh] bg-gray-900 text-white '>Your Information</h1>
 
       <div
-        className=" h-[67vh] w-full flex justify-center">
-        <form className="mt-8 mb-2 w-full sm:w-96 overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm flex-grow px-2" onSubmit={handleSubmit(onClickSubmit)}>
+        className="h-[67vh] w-full flex justify-center lg:px-[1vw] px-[3vw] ">
+        <form className="mt-8 mb-2 w-full sm:w-96 overflow-y-scroll lg:pb-[3vh] pb-[10vh] docInputForm flex-grow px-2 docInfo" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-4">
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">

@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const PatientProfile = () => {
   const user = useSelector((state) => state.profile.user);
   const [name,SetName] = useState(`${user.firstName} ${user.lastName}`);
-  const [image,SetImage] = useState("https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG1vZGVsfGVufDB8fDB8fHww");
+  const [image,SetImage] = useState("https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.1818581771.1714327882&semt=sph");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const PatientProfile = () => {
           floated={false}
           shadow={false}
           color="transparent"
-          className="absolute inset-0 m-0 h-full w-full rounded-none bg-[url(https://images.unsplash.com/photo-1564485377539-4af72d1f6a2f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fG1vZGVsfGVufDB8fDB8fHww)] bg-cover bg-center"
+          className="absolute inset-0 m-0 h-full w-full rounded-none bg-[url(https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.1818581771.1714327882&semt=sph)] bg-cover bg-center"
         >
           <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50" />
         </CardHeader>

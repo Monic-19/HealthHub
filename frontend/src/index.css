@@ -10,6 +10,11 @@ body::-webkit-scrollbar{
     display: none;
 }
 
+.docInfo::-webkit-scrollbar{
+    display: none;
+}
+
+
 .c{
     background-position: center;
     background-size: contain;
