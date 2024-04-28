@@ -120,7 +120,7 @@ export function logout(navigate) {
 
 export const verifyEmailExistence = async (email) => {
   try {
-    const response = await verificationEmail(email);
+    const response = await apiConnector("GET",VERIFY_EMAIL,{email});
     return response.bool;
   } catch (error) {
     console.error('Error while verifying email:', error);
