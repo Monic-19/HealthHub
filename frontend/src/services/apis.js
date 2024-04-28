@@ -17,6 +17,7 @@ export const appointmentEndpoints = {
 export const InformationEndpoints = {
     SAVE_DOCTOR_INFORMATION:BASE_URL + "/personal-info/doctor",
     SAVE_PATIENT_INFORMATION:BASE_URL + "/personal-info/patient",
+    SAVE_CLINIC_INFORMATION:BASE_URL + "/personal-info/clinic",
     GET_DOCTOR_INFORMATION:BASE_URL + "/personal-info/doctor",
     GET_PATIENT_INFORMATION:BASE_URL + "/personal-info/patient",
 }

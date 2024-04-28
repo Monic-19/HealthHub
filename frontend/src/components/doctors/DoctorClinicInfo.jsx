@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
+import { Card, Typography, Input, Checkbox, Button, useSelect, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { saveClinicInformation } from "../../services/Operations/personal_InformationAPI";
 
 
 const DoctorClinicInfo = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.profile.user);
     const onClickSubmit = (data) => {
-      console.log(data);
+      // console.log(user.id,data);
+      dispatch(saveClinicInformation(user.id,data));
     }
 
   return (
@@ -36,9 +41,9 @@ const DoctorClinicInfo = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              {...register("clinicName", { required: true })}
+              {...register("name", { required: true })}
             />
-            {errors.clinicName && <span>This field is required</span>}
+            {errors.name && <span>This field is required</span>}
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Pincode
@@ -149,9 +154,9 @@ const DoctorClinicInfo = () => {
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
-              {...register("fees", { required: true })}
+              {...register("fee", { required: true })}
             />
-            {errors.fees && <span>This field is required</span>}
+            {errors.fee && <span>This field is required</span>}
 
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
@@ -199,4 +204,4 @@ const DoctorClinicInfo = () => {
   )
 }
 
-export default DoctorClinicInfo
+export default DoctorClinicInfo;

@@ -6,7 +6,6 @@ import { sequelize } from "../Config/sequelize";
 import Clinic from "../Models/Clinic";
 
 const saveDoctorInformation = async (req: Request, res: Response) => {
-    // Start an Transaction... 
     const transaction = await sequelize.transaction();
 
     try {
@@ -67,6 +66,14 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             state
         }, { transaction });
 
+        if (!address || !address.id) {
+            await transaction.rollback();
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid address information',
+            });
+        }
+
         const doctor = await Doctor.create({
             userId,
             education,
@@ -74,6 +81,14 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             specialization,
             medicalField
         }, { transaction });
+
+        if (!doctor || !doctor.id) {
+            await transaction.rollback();
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid doctor information',
+            });
+        }
 
         await User.update({
             phoneNo,
@@ -141,6 +156,14 @@ const savePatientInformation = async (req: Request, res: Response) => {
             state
         }, { transaction });
 
+        if (!address || !address.id) {
+            await transaction.rollback();
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid address information',
+            });
+        }
+
         await User.update({
             phoneNo,
             dob,
@@ -169,8 +192,17 @@ const savePatientInformation = async (req: Request, res: Response) => {
 
 const saveClinicInformation = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
-    try{
-        const { userId , name, fee, openingTime, closingTime, pincode, building, area, landmark, townCity, state } = req.body;
+    
+    try {
+        const { userId, name, fee, openingTime, closingTime, pincode, building, area, landmark, townCity, state } = req.body;
+        
+        if (!userId || !name || !fee || !openingTime || !closingTime || !pincode || !building || !area || !landmark || !townCity || !state) {
+            return res.status(400).json({
+                success: false,
+                error: 'Missing required fields in request body',
+            });
+        }
+
         const user = await User.findByPk(userId, { transaction });
         if (!user) {
             return res.status(404).json({
@@ -188,6 +220,14 @@ const saveClinicInformation = async (req: Request, res: Response) => {
             state
         }, { transaction });
         
+        if (!address || !address.id) {
+            await transaction.rollback();
+            return res.status(400).json({
+                success: false,
+                error: 'Invalid address information',
+            });
+        }
+
         const clinic = await Clinic.create({
             name,
             addressId: address.id,
@@ -202,8 +242,10 @@ const saveClinicInformation = async (req: Request, res: Response) => {
             success: true,
             message: 'Clinic information saved successfully',
         });
-    }catch(error) {
+
+    } catch(error) {
         console.error('Error saving clinic information:', error);
+        await transaction.rollback();
         return res.status(500).json({
             success: false,
             error: 'Internal server error',
@@ -211,7 +253,8 @@ const saveClinicInformation = async (req: Request, res: Response) => {
     }
 }
 
-const getClinicInformation = async (req, res) => {
+
+const getClinicInformation = async (req: Request, res: Response) => {
     try {
         const clinics = await Clinic.findAll({
             include: [
