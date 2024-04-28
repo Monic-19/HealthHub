@@ -20,14 +20,14 @@ const DoctorClinicInfo = () => {
     <div
 
       className='h-[70vh] w-[100%] '>
-      <h1 className='text-3xl p-5 font-mono h-[10vh] bg-gray-900 text-white'>Your Clinic's Information</h1>
+      <h1 className='lg:text-3xl text-2xl p-5 font-mono h-[10vh] bg-gray-900 text-white'>Your Clinic's Information</h1>
 
       <motion.div
         initial={{ x: 300, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className=" h-[67vh] w-[100%] flex justify-center">
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm flex-grow" onSubmit={handleSubmit(onClickSubmit)}>
+        className=" h-[67vh] w-[100%] flex justify-center lg:px-[1vw] px-[3vw]">
+        <form className=" docInfo mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 overflow-y-scroll lg:pb-[3vh] pb-[10vh] docInputForm flex-grow" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-4">
 
 

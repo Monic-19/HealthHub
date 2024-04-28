@@ -9,22 +9,22 @@ const PatientInfo = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.user);
-  
+
   const onClickSubmit = (data) => {
-    dispatch(savePatientInformation(user.id,data));
+    dispatch(savePatientInformation(user.id, data));
   };
 
   return (
     <div className='p-6'>
-       <motion.div
-        initial={{ x : -300, opacity : 0}}
-        animate={{ x : 0, opacity : 1 }}
+      <motion.div
+        initial={{ x: -300, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className=" h-[67vh] w-[100%] flex justify-center">
-          <div>
+        className=" h-[67vh] w-[100%]  flex justify-center">
 
-        <form className=" mb-2 p-4 w-[90vw] max-w-screen-lg sm:w-[35vw] overflow-y-scroll lg:pb-[0vh] pb-[10vh] docInputForm bg-white h-[65vh]" onSubmit={handleSubmit(onClickSubmit)}>
-          <div className="mb-1 flex flex-col gap-6">
+          <form className="docInfo mb-2 p-4 w-[100vw] overflow-y-scroll lg:pb-[3vh] pb-[10vh] docInputForm bg-white h-[65vh] rounded-md " onSubmit={handleSubmit(onClickSubmit)}>
+
+            <div className="mb-1 flex flex-col gap-6 ">
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Phone Number
               </Typography>
@@ -39,7 +39,7 @@ const PatientInfo = () => {
                 {...register("phoneNo", { required: true })}
               />
               {errors.mobileNumber && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Profile Photo
               </Typography>
@@ -48,7 +48,7 @@ const PatientInfo = () => {
                 size="lg"
                 {...register("profilePhoto")}
               />
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 DOB
               </Typography>
@@ -58,7 +58,7 @@ const PatientInfo = () => {
                 {...register("dob", { required: true })}
               />
               {errors.dob && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Gender
               </Typography>
@@ -75,7 +75,7 @@ const PatientInfo = () => {
                 <option value="Other">Other</option>
               </select>
               {errors.gender && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Blood Group
               </Typography>
@@ -97,8 +97,8 @@ const PatientInfo = () => {
                 <option value="O-">O-</option>
               </select>
               {errors.bloodGroup && <span>This field is required</span>}
-      
-      
+
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Pincode
               </Typography>
@@ -113,7 +113,7 @@ const PatientInfo = () => {
                 {...register("pincode", { required: true })}
               />
               {errors.pincode && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Building/House no./Flat/Other
               </Typography>
@@ -128,7 +128,7 @@ const PatientInfo = () => {
                 {...register("building", { required: true })}
               />
               {errors.building && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Area
               </Typography>
@@ -143,7 +143,7 @@ const PatientInfo = () => {
                 {...register("area", { required: true })}
               />
               {errors.area && <span>This field is required</span>}
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Landmark
               </Typography>
@@ -157,7 +157,7 @@ const PatientInfo = () => {
                 }}
                 {...register("landmark")}
               />
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 Town City
               </Typography>
@@ -171,7 +171,7 @@ const PatientInfo = () => {
                 }}
                 {...register("townCity")}
               />
-      
+
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 State
               </Typography>
@@ -185,14 +185,14 @@ const PatientInfo = () => {
                 }}
                 {...register("state")}
               />
-          </div>
-          
-          <Button type='submit' className="mt-6" fullWidth>
-            Submit
-          </Button>
+            </div>
 
-        </form>
-          </div>
+            <Button type='submit' className="mt-6" fullWidth>
+              Submit
+            </Button>
+
+          </form>
+
       </motion.div >
     </div>
   )

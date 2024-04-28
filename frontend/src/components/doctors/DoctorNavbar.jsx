@@ -19,32 +19,29 @@ function NavList() {
   return (
     <>
       <Tabs value="df">
-        <TabsHeader className="lg:w-[50vw] w-full">
+        <TabsHeader className="lg:w-[60vw] w-full">
 
-          
-            <NavLink to={"/doctor/profile"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
-            <Tab value={"Profile"}>Profile</Tab>
+            <NavLink to={"/doctor/profile"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[20vw] lg:w-[9vw]">
+            <Tab value={"Profile"}  className=" text-[3vw] lg:text-lg">Profile</Tab>
             </NavLink>
           
-
-          
-            <NavLink to={"/doctor/info"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
-            <Tab value={"Information"}>Personal Information </Tab>
+            <NavLink to={"/doctor/info"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[20vw] lg:w-[20vw]">
+            <Tab value={"Information"} className=" text-[3vw] lg:text-lg">Personal Information </Tab>
             </NavLink>
 
-            <NavLink to={"/doctor/clinic"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[20vw]">
-            <Tab value={"Clinic_Information"}>Clinic Information </Tab>
+            <NavLink to={"/doctor/clinic"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[20vw] lg:w-[20vw]">
+            <Tab value={"Clinic_Information"}  className=" text-[3vw] lg:text-lg" >Clinic Information </Tab>
             </NavLink>
          
           
-            <NavLink to={"/doctor/appointments"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[25vw] lg:w-[12vw]">
-            <Tab value={"Appointments"}>Appointments</Tab>
+            <NavLink to={"/doctor/appointments"} className="flex items-center hover:text-black hover:font-bold transition-colors w-[20vw] lg:w-[12vw]">
+            <Tab value={"Appointments"}  className=" text-[3vw] lg:text-lg">Appointments</Tab>
             </NavLink>
           
 
           
-            <NavLink to={"/doctor/stats"} className="flex items-center hover:text-black hover:font-bold  transition-colors w-[25vw] lg:w-[12vw]">
-            <Tab value={"Stats"}>Stats</Tab>
+            <NavLink to={"/doctor/stats"} className="flex items-center hover:text-black hover:font-bold  transition-colors w-[20vw] lg:w-[9vw]">
+            <Tab value={"Stats"}  className=" text-[3vw] lg:text-lg">Stats</Tab>
             </NavLink>
           
         </TabsHeader>
@@ -77,7 +74,7 @@ const DoctorNavbar = () => {
           variant="h6"
           className="mr-4 cursor-pointer py-1.5"
         >
-          <NavLink to={"/doctor"}>Dr. {doctorName}</NavLink>
+          <NavLink to={"/doctor"} className={"font-mono font-bold"}>Dr. {doctorName}</NavLink>
         </Typography>
         <div className="hidden lg:block">
           <NavList />

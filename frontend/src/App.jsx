@@ -24,6 +24,7 @@ import AdminDoctorsList from './components/admin/AdminDoctorsList'
 import AdminAllDoctorLists from './components/admin/AdminAllDoctorLists'
 import VerifyEmail from './components/pages/VerifyEmail'
 import DoctorClinicInfo from './components/doctors/DoctorClinicInfo'
+import AppointmentBookingPage from './components/pages/AppointmentBookingPage'
 
 function App() {
 
@@ -39,6 +40,8 @@ function App() {
           <Route path='/about' element={<About/>}/> 
           <Route path='/contact' element={<Contact/>}/> 
           <Route path='/appointment/:id' element={<Appointment/>}/> 
+          <Route path='/book/:id' element = {<AppointmentBookingPage/>}/>
+
             
           <Route path='/doctor' element={<DoctorDashboard/>}>
             <Route path='profile' element={<DoctorProfile/>}></Route>

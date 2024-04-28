@@ -78,7 +78,9 @@ const HeroA = () => {
                         style={{ clipPath: 'polygon(0 0, 100% 0%, 100% 20%, 0 20%)' }}
                         animate={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0 100%)" }}
                         transition={{ duration: 0.3, delay: 2 }}
-                        className='h-[80%] w-full bg-cover c c1'></motion.div>
+                        className='h-[80%] w-full bg-cover c c1 flex justify-center items-center'>
+                                   <img src="/src/assets/doctorCall.png" alt="" width={200} />
+                        </motion.div>
                 </motion.div>
 
                 <motion.div
@@ -90,7 +92,9 @@ const HeroA = () => {
                         style={{ clipPath: 'polygon(0 0, 100% 0%, 100% 20%, 0 20%)' }}
                         animate={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0 100%)" }}
                         transition={{ duration: 0.3, delay: 2 }}
-                        className='h-[80%] w-full bg-cover c c2'></motion.div>
+                        className='h-[80%] w-full bg-cover c c2 flex justify-center items-center'>
+                                   <img src="src/assets/book.png" alt="" width={200} />
+                        </motion.div>
                 </motion.div>
 
                 <motion.div
@@ -113,7 +117,9 @@ const HeroA = () => {
                         style={{ clipPath: 'polygon(0 0, 100% 0%, 100% 20%, 0 20%)' }}
                         animate={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0 100%)" }}
                         transition={{ duration: 0.3, delay: 2 }}
-                        className='h-[80%] w-full bg-cover c c3'></motion.div>
+                        className='h-[80%] w-full bg-cover c c3 flex justify-center items-center'>
+                              <img src="src/assets/timeStat.png" alt="" width={200}/>
+                        </motion.div>
                 </motion.div>
 
                 <motion.div
@@ -125,7 +131,9 @@ const HeroA = () => {
                         style={{ clipPath: 'polygon(0 0, 100% 0%, 100% 20%, 0 20%)' }}
                         animate={{ clipPath: "polygon(0 0, 100% 0%, 100% 100%, 0 100%)" }}
                         transition={{ duration: 0.3, delay: 2 }}
-                        className='h-[80%] w-full bg-cover c c4'></motion.div>
+                        className='h-[80%] w-full bg-cover c c4 flex justify-center items-center'>
+                              <img src="src/assets/docTeam.png" alt="" width={200} />
+                        </motion.div>
                 </motion.div>
 
             </div>

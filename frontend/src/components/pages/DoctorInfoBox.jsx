@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Card, CardHeader, CardBody, CardFooter, Typography, } from "@material-tailwind/react";
 import {motion} from "framer-motion"
+import { useNavigate } from 'react-router-dom';
 
 
 const DoctorInfoBox = ({ doctor }) => {
 
     const [open, setOpen] = React.useState(false);
-
+    const navigate = useNavigate(); 
     const handleOpen = () => setOpen(!open);
 
     const {
@@ -73,7 +74,7 @@ const DoctorInfoBox = ({ doctor }) => {
                                 <span>Go Back</span>
                             </Button>
                             <Button variant="gradient" color="green" onClick={handleOpen}>
-                                <span>Book Appointment</span>
+                                <span onClick={() => { navigate(`/book/${name}`)}}>Book Appointment</span>
                             </Button>
                         </DialogFooter>
                     </Dialog>
