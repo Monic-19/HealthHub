@@ -1,18 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { motion } from "framer-motion"
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { savePatientInformation } from '../../services/Operations/personal_InformationAPI';
+import {savePatientInformation } from '../../services/Operations/personal_InformationAPI';
+import { useState } from 'react';
+import axios from 'axios';
 
 const PatientInfo = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.user);
+  const [data,setData] = useState();
 
   const onClickSubmit = (data) => {
     dispatch(savePatientInformation(user.id, data));
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/v1/personal-info/patient/${user.id}`);
+        setData(response.data);
+        localStorage.setItem('user',JSON.stringify(response.data.user));
+        setValue("phoneNo", response.data.user.phoneNo);
+        setValue("dob", response.data.user.dob);
+        setValue("gender", response.data.user.gender);
+        setValue("bloodGroup", response.data.user.bloodGroup);
+        setValue("pincode", response.data.address.pincode);
+        setValue("building", response.data.address.building);
+        setValue("area", response.data.address.area);
+        setValue("landmark", response.data.address.landmark);
+        setValue("townCity", response.data.address.townCity);
+        setValue("state", response.data.address.state);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  },[user,setValue])
+
 
   return (
     <div className='p-6'>

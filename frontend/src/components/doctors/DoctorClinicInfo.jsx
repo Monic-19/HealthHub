@@ -1,24 +1,53 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Card, Typography, Input, Checkbox, Button, useSelect, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { saveClinicInformation } from "../../services/Operations/personal_InformationAPI";
+import axios from "axios";
 
 
 const DoctorClinicInfo = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } , setValue} = useForm();
     const dispatch = useDispatch();
     const user = useSelector((state) => state.profile.user);
+    const [clinicData,setClinicData] = useState();
+
     const onClickSubmit = (data) => {
-      // console.log(user.id,data);
       dispatch(saveClinicInformation(user.id,data));
     }
+
+    useEffect(() => {
+      async function fetchData() {
+          try {
+              const response = await axios.get(`http://localhost:8081/api/v1/personal-info/clinic/${user.id}`);
+              setClinicData(response.data);
+          } catch (error) {
+              console.error('Error fetching data:', error);
+          }
+      }
+  
+      fetchData();
+  }, [user.id]); 
+  
+  useEffect(() => {
+      if (clinicData) {
+          setValue("name", clinicData?.clinics?.name);
+          setValue("pincode", clinicData?.address?.pincode);
+          setValue("building", clinicData?.address?.building);
+          setValue("area", clinicData?.address?.area);
+          setValue("landmark", clinicData?.address?.landmark);
+          setValue("townCity", clinicData?.address?.townCity);
+          setValue("state", clinicData?.address?.state);
+          setValue("fee", clinicData?.clinics?.fee);
+          setValue("openingTime", clinicData?.clinics?.openingTime);
+          setValue("closingTime", clinicData?.clinics?.closingTime);
+      }
+  }, [clinicData, setValue]); 
 
   return (
     
     <div
-
       className='h-[70vh] w-[100%] '>
       <h1 className='lg:text-3xl text-2xl p-5 font-mono h-[10vh] bg-gray-900 text-white'>Your Clinic's Information</h1>
 

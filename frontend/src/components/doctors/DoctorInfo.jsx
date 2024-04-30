@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { saveDoctorInformation } from "../../services/Operations/personal_InformationAPI";
+import axios from "axios";
 
 const DoctorInfo = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.user);
+  const [data,setData] = useState();
+
   const onClickSubmit = (data) => {
     dispatch(saveDoctorInformation(user.id, data));
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/v1/personal-info/doctor/${user.id}`);
+        setData(response.data);
+        localStorage.setItem('user',JSON.stringify(response.data.user));
+        setValue("phoneNo", response.data.user.phoneNo);
+        setValue("dob", response.data.user.dob);
+        setValue("gender", response.data.user.gender);
+        setValue("bloodGroup", response.data.user.bloodGroup);
+        setValue("pincode", response.data.address.pincode);
+        setValue("building", response.data.address.building);
+        setValue("area", response.data.address.area);
+        setValue("landmark", response.data.address.landmark);
+        setValue("townCity", response.data.address.townCity);
+        setValue("state", response.data.address.state);
+        setValue("education", response.data.doctor.education);
+        setValue("experience", response.data.doctor.experience);
+        setValue("specialization", response.data.doctor.specialization);
+        setValue("medicalField", response.data.doctor.medicalField);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  },[user,setValue])
+
   return (
     <div
-
       className='h-[70vh] w-full'>
       <h1 className='text-3xl p-5 font-mono h-[10vh] bg-gray-900 text-white '>Your Information</h1>
 

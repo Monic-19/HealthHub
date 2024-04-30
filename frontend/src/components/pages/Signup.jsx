@@ -11,7 +11,7 @@ import { ACCOUNT_TYPE } from '../../utils/constants';
 import Tab from '../Buttons/Tab';
 import { sendOtp, verifyEmailExistence } from '../../services/Operations/authAPI';
 import { setSignupData } from '../../slices/authSlice';
-import toast from 'react-hot-toast';
+
 
 const Signup = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -25,14 +25,6 @@ const Signup = () => {
     
     const onSubmit = (data) => {
         if (submitClicked) {
-            // const emailExists = verifyEmailExistence({email: data.email});
-            // console.log(emailExists);
-            // if(emailExists){
-            //     toast.error('User already exists with email')
-            // } else {
-            //     dispatch(setSignupData({firstName: data.firstName,lastName: data.lastName,email: data.email,password: data.password,role: accountType}));
-            //     dispatch(sendOtp(data.email,navigate));  
-            // }
             dispatch(setSignupData({firstName: data.firstName,lastName: data.lastName,email: data.email,password: data.password,role: accountType}));
             dispatch(sendOtp(data.email,navigate));  
         }  

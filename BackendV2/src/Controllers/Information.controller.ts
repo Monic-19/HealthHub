@@ -57,6 +57,11 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             });
         }
 
+        if (user.addressId !== null) {
+            await User.update({ addressId: null }, { where: { id: userId }, transaction });
+            await Address.destroy({ where: { id: user.addressId }, transaction });
+        }
+
         const address = await Address.create({
             pincode,
             building,
@@ -73,7 +78,12 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
                 error: 'Invalid address information',
             });
         }
-
+        
+        let existingDoctor = await Doctor.findOne({ where: { userId } });
+        if (existingDoctor) {
+            await Doctor.destroy({ where: { userId }, transaction });
+        }
+        
         const doctor = await Doctor.create({
             userId,
             education,
@@ -211,6 +221,12 @@ const saveClinicInformation = async (req: Request, res: Response) => {
             });
         }
 
+        const findClinic = await Clinic.findOne({where: {userId: user.id}});
+        if(findClinic){
+            await Clinic.destroy({where: {userId: user.id}, transaction });
+            await Address.destroy({where: {id: findClinic.addressId }, transaction });
+        }
+
         const address = await Address.create({
             pincode,
             building,
@@ -256,26 +272,33 @@ const saveClinicInformation = async (req: Request, res: Response) => {
 
 const getClinicInformation = async (req: Request, res: Response) => {
     try {
-        const clinics = await Clinic.findAll({
-            include: [
-                {
-                    model: Address,
-                    attributes: ['pincode', 'building', 'area', 'landmark', 'townCity', 'state'],
-                },
-            ],
-        });
+        const userId  = req.params.userId;
+        
 
-        if (!clinics || clinics.length === 0) {
+        const clinics = await Clinic.findOne({where: {userId: userId}});
+
+        if (!clinics) {
             return res.status(404).json({
                 success: false,
                 message: 'No clinic information found',
             });
         }
 
+        const address = await Address.findOne({where: {id: clinics.addressId}});
+
+        if(!address) {
+            return res.status(404).json({
+                success: false,
+                message: 'Address not saved'
+            })
+        }
+
         return res.status(200).json({
             success: true,
             clinics,
+            address,
         });
+
     } catch (error) {
         console.error('Error fetching clinic information:', error);
         return res.status(500).json({
@@ -288,37 +311,25 @@ const getClinicInformation = async (req: Request, res: Response) => {
 
 const getDoctorInformation = async (req: Request, res: Response) => {
     try {
-        const userId = req.params.userId;
+        const userId  = req.params.userId;
         const user = await User.findByPk(userId);
-        
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                error: 'User does not exist',
-            });
+        const doctor = await Doctor.findOne({where: {userId: userId}});
+    
+        if (!doctor) {
+          return res.status(404).json({ error: 'Doctor not found' });
         }
 
-        const doctor = await Doctor.findOne({
-            where: { userId },
-            include: [
-                {
-                    model: User,
-                    include: [Address],
-                },
-            ],
-        });
-        
-        if (!doctor) {
+        const address = await Address.findOne({where : {id: user?.addressId}});
+        if(!address){
             return res.status(404).json({
-                success: false,
-                error: 'Doctor information not found for the provided userId',
-            });
+                error: 'address not saved',
+            })
         }
 
         return res.status(200).json({
-            success: true,
-            user: user,
-            doctor: doctor,
+            user, 
+            doctor,
+            address
         });
     } catch (error) {
         console.error('Error fetching doctor information:', error);
@@ -331,7 +342,7 @@ const getDoctorInformation = async (req: Request, res: Response) => {
 
 const getPatientInformation = async(req: Request, res: Response) => {
     try{
-        const userId = req.params.userId;
+        const userId  = req.params.userId;
         const user = await User.findByPk(userId);
         
         if (!user) {
@@ -341,9 +352,17 @@ const getPatientInformation = async(req: Request, res: Response) => {
             });
         }
 
+        const address = await Address.findOne({where: {id: user.addressId}});
+        if(!address){
+            return res.status(404).json({
+                success: false,
+                error: 'Address not saved'
+            })
+        }
+
         return res.status(200).json({
-            success: true,
             user: user,
+            address
         });
     } catch(error){
         console.error('Error fetching patient information:', error);

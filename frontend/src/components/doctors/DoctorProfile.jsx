@@ -1,23 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar } from "@material-tailwind/react";
 import { IoIosStarOutline } from "react-icons/io";
 import Chart from 'react-apexcharts';
-import {motion} from "framer-motion"
+import {motion} from "framer-motion";
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+
 
 const DoctorProfile = () => {
+  const user = useSelector((state) => state.profile.user);
+  const [doctorData,setDoctorData] = useState();
+  
   const doctor_info = {
     profileImageUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZG9jdG9yfGVufDB8fDB8fHww",
-    name: "Dr. John Doe",
-    degree: "MD, MBBS, FRCS",
-    specialization: "Cardiology",
-    education: "Harvard Medical School",
-    state: "Uttar Paradesh",
-    city: "Noida",
-    clinicAddress: "123 Main Street, Cityville",
-    availability: "Monday, Tuesday, Friday",
-    timings: "9 AM - 12 PM",
-    description: "Experienced cardiologist specializing in heart conditions.",
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/v1/personal-info/doctor/${user.id}`);
+        setDoctorData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+  }
+
+    fetchData();
+  },[user.id])
 
   const [verified, setVerified] = useState(true);
 
@@ -41,13 +50,11 @@ const DoctorProfile = () => {
               transition={{  duration : .5}}
               className=' lg:w-[35vw] w-[90%] rounded-lg shadow-xl lg:h-[18vh] h-[22vh] flex justify-center items-center lg:gap-[4vw] gap-[10vw] p-4 bg-gray-200 cursor-pointer absolute top-[5vh] left-[2vh] font-mono'>
               <Avatar src={doctor_info.profileImageUrl} alt="avatar" size="xxl" withBorder={true} className="p-0.5" />
-              <div className=' h-full text-lg '>
-
-                <h1>{doctor_info.name}</h1>
-                <h1>{doctor_info.degree}</h1>
-                <h1>{doctor_info.clinicAddress}</h1>
-                <h1>{doctor_info.city + " , " + doctor_info.state}</h1>
-
+              <div className='h-full text-lg '>
+                {user?.firstName && user?.lastName && <h1>Dr {user?.firstName} {user?.lastName}</h1>}
+                {doctorData?.doctor?.specialization && <h1>{doctorData?.doctor?.specialization}</h1>}
+                {doctorData?.address?.building && doctorData?.address?.area && <h1>{doctorData?.address?.building}, {doctorData?.address?.area}</h1>}
+                {doctorData?.address?.townCity && doctorData?.address?.state && <h1>{doctorData?.address?.townCity}, {doctorData?.address?.state}</h1>}
               </div>
             </motion.div>
 

@@ -4,10 +4,10 @@ import { saveDoctorInformation, savePatientInformation, saveClinicInformation, g
 const router = express.Router();
 
 router.post('/doctor', saveDoctorInformation);
-router.get('/doctor', getDoctorInformation);
+router.get('/doctor/:userId', getDoctorInformation);
 router.post('/patient', savePatientInformation);
-router.get('/patient', getPatientInformation);
+router.get('/patient/:userId', getPatientInformation);
 router.post('/clinic', saveClinicInformation);
-router.get('/clinic', getClinicInformation);
+router.get('/clinic/:userId', getClinicInformation);
 
 export default router;

@@ -152,7 +152,6 @@ const Appointment = () => {
                 <DoctorInfoBox key={index} doctor={doctor} />
               ))
             ) : (
-              // <Animation/>
               <Loader ans={"Sorry, no doctors avaliable."}/>
             )}
 
