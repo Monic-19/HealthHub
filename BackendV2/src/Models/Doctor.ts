@@ -50,5 +50,6 @@ Doctor.init(
   }
 );
 
+Doctor.belongsTo(User, { foreignKey: 'userId' });
 
 export default Doctor;

@@ -29,15 +29,17 @@ const createDoctor = async (req: Request, res: Response) => {
   }
 };
 
-const doctors = async (req: Request, res: Response) => {
+const getDoctorsInformation = async (req: Request, res: Response) => {
   try {
-    const doctors = await Doctor.findAll(); 
+    const doctors = await Doctor.findAll({
+      include: [{ model: User, attributes: { exclude: ['password'] } }], 
+    });
+
     return res.status(200).json(doctors);
   } catch (error) {
-    console.error('Error fetching doctors:', error);
-    return res.status(500).json({ error: 'Could not fetch doctors' });
+    console.error('Error fetching doctors information:', error);
+    return res.status(500).json({ error: 'Could not fetch doctors information' });
   }
 };
-
   
-export { createDoctor, doctors };
+export { createDoctor, getDoctorsInformation };

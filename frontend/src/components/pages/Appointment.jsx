@@ -46,11 +46,11 @@ const Appointment = () => {
 
   const filteredDoctors = doctors.filter(doctor => {
     return (
-      doctor.doctorName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor.state?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor.specialization?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor.timings?.toLowerCase().includes(searchQuery.toLowerCase())
+      doctor?.user?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor?.state?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor?.specialization?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doctor?.timings?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   });
 
