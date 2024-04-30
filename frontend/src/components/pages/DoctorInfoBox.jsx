@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Card, CardHeader, CardBody, CardFooter, Typography, } from "@material-tailwind/react";
 import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 const DoctorInfoBox = ({ doctor }) => {
@@ -10,8 +11,30 @@ const DoctorInfoBox = ({ doctor }) => {
     const navigate = useNavigate(); 
     const handleOpen = () => setOpen(!open);
 
-    const {
-        profileImageUrl, name, degree, specialization, education,state,city, clinicAddress, availability, description, timings } = doctor;
+    const { profileImageUrl, education, userId } = doctor;
+    const [doctorInformation,setDoctorInformation] = useState();
+    const [clinicInfo, setClinicInfo] = useState(null);
+
+    useEffect(() => {
+      const fetchClinicInfo = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8081/api/v1/personal-info/clinic/${userId}`); 
+          setClinicInfo(response.data);
+        } catch (error) {
+          console.error('Error fetching clinic information:', error);
+        }
+      };
+      const fetchDoctorInfo = async () => {
+        try{
+            const response = await axios.get(`http://localhost:8081/api/v1/personal-info/doctor/${userId}`);
+            setDoctorInformation(response.data);
+        }catch(error){
+            console.error('Error fetching doctor information:', error);
+        }
+      }
+      fetchDoctorInfo();
+      fetchClinicInfo();
+    }, []);
 
     return (
         <motion.div   initial = {{opacity: 0, y : "10%"}}
@@ -27,10 +50,10 @@ const DoctorInfoBox = ({ doctor }) => {
                 </CardHeader>
                 <CardBody className='h-[30%] '>
                     <Typography variant="h5" color="blue-gray" className="mb-2">
-                        {name}
+                    {doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}
                     </Typography>
                     <Typography variant="paragraph" color="blue-gray" className="mb-0">
-                        {specialization}
+                        {doctorInformation?.doctor?.specialization}
                     </Typography>
                 </CardBody>
 
@@ -39,27 +62,20 @@ const DoctorInfoBox = ({ doctor }) => {
                         Show Details
                     </Button>
                     <Dialog open={open} handler={handleOpen}>
-                        <DialogHeader>{name}</DialogHeader>
+                        <DialogHeader>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</DialogHeader>
                         <DialogBody>
 
-                            <Typography variant="h5" color="blue-gray" className="mb-3">
-                                {description}
-                            </Typography>
-
-                            <i>{name}</i> is a highly skilled medical professional with a <i>{degree}</i> in <i>{specialization}</i>.
-                            With extensive education from <i>{education}</i>,<i>{name}</i> brings a wealth of knowledge and expertise to their practice.
-                            Specializing in <i>{specialization}</i>,<i>{name}</i> is dedicated to providing personalized and compassionate care to each patient.
-                            <i>{name}</i> employs the latest medical advancements and techniques to ensure the highest quality of care.
-                            Known for their meticulous attention to detail and commitment to excellence,<i>{name}</i> is trusted by patients for their expertise and dedication to improving health outcomes.
+                            <i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is a highly skilled medical professional with a degree in <i>{doctorInformation?.doctor?.specialization}</i>.
+                            With extensive education from <i>{education}</i>,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> brings a wealth of knowledge and expertise to their practice.
+                            Specializing in <i>{doctorInformation?.doctor?.specialization}</i>,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is dedicated to providing personalized and compassionate care to each patient.
+                            <i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> employs the latest medical advancements and techniques to ensure the highest quality of care.
+                            Known for their meticulous attention to detail and commitment to excellence,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is trusted by patients for their expertise and dedication to improving health outcomes.
 
                             <Typography variant="paragraph" color="blue-gray" className="mt-5">
-                                Clinic address - {clinicAddress  +` , ${city} , ${state} `}
-                            </Typography>
-                            <Typography variant="paragraph" color="blue-gray" className="mt-2">
-                                Available on - {availability} 
+                                Clinic address - {clinicInfo?.address?.building + ', ' + clinicInfo?.address?.area + ', ' + clinicInfo?.address?.landmark + ', ' + clinicInfo?.address?.townCity + ', ' + clinicInfo?.address?.state}
                             </Typography>
                             <Typography variant="h6" color="blue-gray" className="mt-2">
-                                Timings - {timings} 
+                                Timings - {clinicInfo?.clinics?.openingTime} to {clinicInfo?.clinics?.closingTime}
                             </Typography>
 
 
@@ -74,7 +90,7 @@ const DoctorInfoBox = ({ doctor }) => {
                                 <span>Go Back</span>
                             </Button>
                             <Button variant="gradient" color="green" onClick={handleOpen}>
-                                <span onClick={() => { navigate(`/book/${name}`)}}>Book Appointment</span>
+                                <span onClick={() => { navigate(`/book/${doctorInformation?.user?.firstName} ${doctorInformation?.user?.lastName}`)}}>Book Appointment</span>
                             </Button>
                         </DialogFooter>
                     </Dialog>

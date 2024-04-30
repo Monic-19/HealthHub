@@ -1,23 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './Navbar'
 import Footer from './Footer'
 import { Input } from "@material-tailwind/react";
 import DoctorInfoBox from './DoctorInfoBox';
 import { motion } from "framer-motion";
-import Loader from "./Loader"
+import Loader from "./Loader";
+import axios from 'axios';
+
 
 const Appointment = () => {
+  const [doctors, setDoctors] = useState([]);
 
-  const doctorCategories = [
-    "Ophthalmology",
-    "Cardiology",
-    "Orthopedics",
-    "Oncology",
-    "Dentistry",
-    "ENT (Ear, Nose, Throat)",
-    "Neurology",
-    "Allergy and Immunology",
-  ];
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://localhost:8081/api/v1/doctor/info'); 
+        setDoctors(response.data);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  const doctorCategories = Array.from(new Set(doctors.map(doctor => doctor.specialization)));
+  console.log(doctors);
 
   const [category, setCategory] = useState("");
   const [state, setState] = useState('');
@@ -33,75 +41,6 @@ const Appointment = () => {
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
-
-  const doctors = [
-    {
-      profileImageUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZG9jdG9yfGVufDB8fDB8fHww",
-      name: "Dr. John Doe",
-      degree: "MD, MBBS, FRCS",
-      specialization: "Cardiology",
-      education: "Harvard Medical School",
-      state: "Uttar Paradesh",
-      city: "Noida",
-      clinicAddress: "123 Main Street, Cityville",
-      availability: "Monday, Tuesday, Friday",
-      timings: "9 AM - 12 PM",
-      description: "Experienced cardiologist specializing in heart conditions.",
-    },
-    {
-      profileImageUrl: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZG9jdG9yfGVufDB8fDB8fHww",
-      name: "Dr. Jane Smith",
-      degree: "MD, MBBS",
-      specialization: "Dermatology",
-      education: "Stanford University School of Medicine",
-      state: "Rajasthan",
-      city: "Ajmer",
-      clinicAddress: "456 Elm Street, Townsville",
-      availability: "Tuesday, Thursday, Saturday",
-      timings: "12 PM to 3 PM",
-      description: "Dermatologist providing expert care for skin issues.",
-    },
-    {
-      profileImageUrl: "https://images.unsplash.com/photo-1612943680768-d82060323fd5?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OTV8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
-      name: "Dr. Michael Johnson",
-      degree: "MD, PhD",
-      specialization: "Neurology",
-      education: "Yale School of Medicine",
-      state: "Rajasthan",
-      city: "Kishangarh",
-      clinicAddress: "789 Oak Avenue, Villagetown",
-      availability: "Monday, Wednesday, Friday",
-      timings: "9 AM - 12 PM",
-      description: "Neurologist with extensive experience in treating neurological disorders.",
-    },
-    {
-      profileImageUrl: "https://images.unsplash.com/photo-1612636320854-776180f479d8?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTM4fHxkb2N0b3J8ZW58MHx8MHx8fDA%3D",
-      name: "Dr. Emily Rodriguez",
-      degree: "MD, MBBS",
-      specialization: "Pediatrics",
-      education: "Columbia University Vagelos College of Physicians and Surgeons",
-      state: "Gujarat",
-      city: "Vadodara",
-      clinicAddress: "101 Pine Street, Hamletville",
-      availability: "Monday to Saturday",
-      timings: "3 PM - 6 PM",
-      description: "Pediatrician providing compassionate care for children of all ages.",
-    },
-    {
-      profileImageUrl: "https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTYwfHxkb2N0b3J8ZW58MHx8MHx8fDA%3D",
-      name: "Dr. David Lee",
-      degree: "MD, MBBS, FRCS",
-      specialization: "Orthopedics",
-      education: "University of California, San Francisco School of Medicine",
-      state: "Haryana",
-      city: "Karnal",
-      clinicAddress: "321 Maple Avenue, Suburbia",
-      availability: "Wednesday, Thursday, Saturday",
-      timings: "12 PM - 3 PM",
-      description: "Orthopedic surgeon specializing in bone and joint disorders.",
-    }
-  ];
 
   const [searchQuery, setSearchQuery] = useState('');
 

@@ -28,5 +28,16 @@ const createDoctor = async (req: Request, res: Response) => {
     return res.status(500).json({ error: 'Could not create doctor' });
   }
 };
+
+const doctors = async (req: Request, res: Response) => {
+  try {
+    const doctors = await Doctor.findAll(); 
+    return res.status(200).json(doctors);
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+    return res.status(500).json({ error: 'Could not fetch doctors' });
+  }
+};
+
   
-export { createDoctor };
+export { createDoctor, doctors };
