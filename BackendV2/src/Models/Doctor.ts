@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../Config/sequelize';
 import User from './User'; 
 import Document from './Document'; 
+import Clinic from './Clinic';
 
 class Doctor extends Model {
   public id!: number;
@@ -27,6 +28,14 @@ Doctor.init(
         key: 'id',
       },
     },
+    clinicId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: Clinic,
+        key: 'id',
+      }
+    },
     education: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -50,6 +59,7 @@ Doctor.init(
   }
 );
 
-Doctor.belongsTo(User, { foreignKey: 'userId' });
+Doctor.belongsTo(User, { foreignKey: 'userId' , as: 'user' });
+Doctor.belongsTo(Clinic, { foreignKey: 'clinicId', as: 'clinic' });
 
 export default Doctor;

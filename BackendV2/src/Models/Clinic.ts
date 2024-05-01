@@ -60,4 +60,7 @@ Clinic.init(
   }
 );
 
+Clinic.belongsTo(Address, { foreignKey: 'addressId', as: 'address' });
+Clinic.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
 export default Clinic;

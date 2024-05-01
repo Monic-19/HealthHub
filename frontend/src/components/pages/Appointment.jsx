@@ -42,17 +42,19 @@ const Appointment = () => {
     return `${year}-${month}-${day}`;
   }
 
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredDoctors = doctors.filter(doctor => {
-    return (
-      doctor?.user?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor?.city?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor?.state?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor?.specialization?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      doctor?.timings?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  console.log({
+    state,
+    category,
+    city,
+    doctorName,
+    date,
+    timings
   });
+  console.log(doctors);
+
+ 
+
+  const filteredDoctors = doctors;
 
 
   return (
@@ -71,7 +73,7 @@ const Appointment = () => {
               key={index}
               className={`rounded-md border border-black px-3 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:bg-black hover:text-white font-mono ${category === categoryItem ? 'bg-black text-white' : 'text-black'
                 }`}
-              onClick={() => { setCategory(categoryItem); setSearchQuery(categoryItem) }}
+              onClick={() => { setCategory(categoryItem) }}
             >
               {categoryItem}
             </button>
@@ -105,23 +107,23 @@ const Appointment = () => {
             <h1 className=' text-lg font-bold'>Search for In-Clinic Appointment </h1>
 
             <div className='w-[75%]'>
-              <Input value={state} label="State" onChange={(e) => { setState(e.target.value); setSearchQuery(e.target.value) }} />
+              <Input value={state} label="State" onChange={(e) => { setState(e.target.value) }} />
             </div>
             <div className='w-[75%]'>
-              <Input value={city} label="City" onChange={(e) => { setCity(e.target.value); setSearchQuery(e.target.value) }} />
+              <Input value={city} label="City" onChange={(e) => { setCity(e.target.value) }} />
             </div>
             <div className='w-[75%]'>
-              <Input variant="standard" label="Category" placeholder="Category" onChange={(e) => { setCategory(e.target.value); setSearchQuery(e.target.value) }} value={category} />
+              <Input variant="standard" label="Category" placeholder="Category" onChange={(e) => { setCategory(e.target.value) }} value={category} />
             </div>
             <div className='w-[75%]'>
-              <Input variant="standard" value={doctorName} label="Search by doctors name" placeholder="name" onChange={(e) => { setDoctorName(e.target.value); setSearchQuery(e.target.value) }} />
+              <Input variant="standard" value={doctorName} label="Search by doctors name" placeholder="name" onChange={(e) => { setDoctorName(e.target.value) }} />
             </div>
             <div className='w-[75%] mt-4'>
               <Input type="date" name="date" value={date}
                 min={getTodayDate()} label="Date" onChange={(e) => { setDate(e.target.value) }} />
             </div>
             <div className='w-[75%]'>
-              <select id="timeSlot" name="timeSlot" value={timings} className='border-[1px] rounded-md border-black w-full p-3 text-sm' onChange={(e) => { setTimings(e.target.value); setSearchQuery(e.target.value); setSearchQuery(e.target.value) }}>
+              <select id="timeSlot" name="timeSlot" value={timings} className='border-[1px] rounded-md border-black w-full p-3 text-sm' onChange={(e) => { setTimings(e.target.value)}}>
                 <option value="">Select Time</option>
                 <option value="9 AM - 12 PM">9 AM - 12 PM</option>
                 <option value="12 PM - 3 PM">12 PM - 3 PM</option>

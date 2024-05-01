@@ -84,6 +84,7 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             await Doctor.destroy({ where: { userId }, transaction });
         }
         
+        
         const doctor = await Doctor.create({
             userId,
             education,
@@ -91,6 +92,11 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             specialization,
             medicalField
         }, { transaction });
+        
+        const clinic = await Clinic.findOne({where: {userId: user.id}, transaction});
+        if(clinic){
+            await doctor.update({clinicId: clinic.id},{where: {userId: user.id}, transaction});
+        }
 
         if (!doctor || !doctor.id) {
             await transaction.rollback();
@@ -252,6 +258,11 @@ const saveClinicInformation = async (req: Request, res: Response) => {
             closingTime,
             userId,
         }, { transaction });
+
+        const doctor = await Doctor.findOne({where: {userId: user.id}, transaction });
+        if(doctor){
+            await doctor.update({clinicId: clinic.id},{where: { userId: user.id }, transaction });
+        }
 
         await transaction.commit();
         return res.status(200).json({

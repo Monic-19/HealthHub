@@ -84,5 +84,6 @@ User.init(
   }
 );
 
+User.belongsTo(Address, { foreignKey: 'addressId', as: 'address' });
 
 export default User;
