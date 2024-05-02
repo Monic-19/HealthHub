@@ -1,7 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../Config/sequelize';
 import Address from './Address'; 
-import Document from './Document';
 
 class User extends Model {
   public id!: number;

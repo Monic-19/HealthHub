@@ -3,14 +3,19 @@ import { sequelize } from '../Config/sequelize';
 import User from './User'; 
 import Document from './Document'; 
 import Clinic from './Clinic';
+import Address from './Address';
 
 class Doctor extends Model {
   public id!: number;
-  public userId!: number;
+  public userId!: number | null;
+  public clinicId!: number | null;
   public education!: string;
   public experience!: number;
   public specialization!: string;
   public medicalField!: string;
+  public readonly user?: User;
+  public readonly clinic?: Clinic;
+  public readonly address?: Address; 
 }
 
 Doctor.init(

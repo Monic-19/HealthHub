@@ -8,6 +8,7 @@ import addressRouter from './Routes/address.route';
 import doctorRouter from './Routes/doctor.route';
 import InformationRouter from './Routes/information.route';
 import InsertionRouter from './Routes/insertion.route';
+import AppointmentRouter from './Routes/appointment.route';
 import dotenv from 'dotenv';
 
 
@@ -31,6 +32,7 @@ async function main(){
       app.use('/api/v1/address', addressRouter);
       app.use('/api/v1/personal-info', InformationRouter);
       app.use('/api/v1/insert', InsertionRouter);
+      app.use('/api/v1/appointment',AppointmentRouter);
   
       app.get('/', (req: Request, res: Response) => {
         res.send('Hello World');

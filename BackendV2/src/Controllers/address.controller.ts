@@ -75,3 +75,22 @@ export const deleteAddressById = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+export const getAddressList = async (req: Request, res: Response) => {
+  try {
+    const { addressIds } = req.query;
+
+    if (!Array.isArray(addressIds) || addressIds.length === 0) {
+      return res.status(400).json({ error: "Invalid or empty address IDs" });
+    }
+
+    const addresses = await Address.findAll({
+      where: { id: addressIds }
+    });
+
+    res.status(200).json(addresses);
+  } catch (error) {
+    console.error('Error fetching addresses:', error);
+    return res.status(500).json({ error: 'Could not fetch addresses' });
+  }
+};

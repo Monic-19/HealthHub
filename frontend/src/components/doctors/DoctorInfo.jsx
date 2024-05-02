@@ -12,7 +12,6 @@ const DoctorInfo = () => {
   const [data,setData] = useState();
 
   const onClickSubmit = (data) => {
-    // console.log(data);
     dispatch(saveDoctorInformation(user.id, data));
   };
 

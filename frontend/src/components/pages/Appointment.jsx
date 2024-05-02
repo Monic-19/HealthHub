@@ -10,29 +10,16 @@ import axios from 'axios';
 
 const Appointment = () => {
   const [doctors, setDoctors] = useState([]);
+  const [address, setAddress] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-  useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const response = await axios.get('http://localhost:8081/api/v1/doctor/info'); 
-        setDoctors(response.data);
-      } catch (error) {
-        console.error('Error fetching doctors:', error);
-      }
-    };
-
-    fetchDoctors();
-  }, []);
-
-  const doctorCategories = Array.from(new Set(doctors.map(doctor => doctor.specialization)));
-  console.log(doctors);
-
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState('');
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [doctorName, setDoctorName] = useState('');
   const [date, setDate] = useState(getTodayDate());
-  const [timings, setTimings] = useState('anytime');
+  const [startingTime, setStartingTime] = useState('');
+  const [endingTime, setEndingTime] = useState('');
 
   function getTodayDate() {
     const today = new Date();
@@ -42,19 +29,67 @@ const Appointment = () => {
     return `${year}-${month}-${day}`;
   }
 
-  console.log({
-    state,
-    category,
-    city,
-    doctorName,
-    date,
-    timings
-  });
-  console.log(doctors);
+  const doctorCategories = Array.from(new Set(doctors.map(d => d.specialization)));
 
- 
+  useEffect(() => {
+    let filtered = doctors.filter(doctor => {
+      if (category != '' && doctor.specialization !== category) {
+        return false;
+      }
+      if (doctorName != '' && !doctor.user.firstName.toLowerCase().includes(doctorName.toLowerCase())) {
+        return false;
+      }
+      return true;
+    });
 
-  const filteredDoctors = doctors;
+    if(city != '' || state != ''){
+      let filterAddress = address.filter(a => {
+        if(city != '' && a.townCity != city){
+          return false;
+        }
+        if(state != '' && a.state != state){
+          return false;
+        }
+        return true;
+      });
+  
+      const Ids = filterAddress.map(a => a.id);
+      filtered = filtered.filter(doctor => Ids.includes(doctor.clinic.addressId));
+    }
+
+    setFilteredDoctors(filtered);
+  },[category,state,city,doctorName])
+
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://localhost:8081/api/v1/doctor/info'); 
+        setDoctors(response.data);
+        setFilteredDoctors(response.data);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+  
+    fetchDoctors();
+  }, []);
+  
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const addressIds = filteredDoctors.map(d => d.clinic.addressId);
+        const response = await axios.get('http://localhost:8081/api/v1/address/list', { params: { addressIds } });
+        setAddress(response.data);
+      } catch (error) {
+        console.error('Error fetching addresses:', error);
+      }
+    };
+  
+    fetchAddresses();
+  }, [filteredDoctors]);
+
+  console.log({address,filteredDoctors});
 
 
   return (
@@ -123,13 +158,16 @@ const Appointment = () => {
                 min={getTodayDate()} label="Date" onChange={(e) => { setDate(e.target.value) }} />
             </div>
             <div className='w-[75%]'>
-              <select id="timeSlot" name="timeSlot" value={timings} className='border-[1px] rounded-md border-black w-full p-3 text-sm' onChange={(e) => { setTimings(e.target.value)}}>
-                <option value="">Select Time</option>
-                <option value="9 AM - 12 PM">9 AM - 12 PM</option>
-                <option value="12 PM - 3 PM">12 PM - 3 PM</option>
-                <option value="3 PM - 6 PM">3 PM - 6 PM</option>
-                <option value="6 PM - 9 PM">6 PM - 9 PM</option>
-              </select>
+              <div className="flex">
+                <div className="mr-2">
+                  <label htmlFor="startTime">Start Time:</label>
+                  <input type="time" id="startingTime" name="startTime" value={startingTime} className='border-[1px] rounded-md border-black p-3 text-sm' onChange={(e) => { setStartingTime(e.target.value)}} />
+                </div>
+                <div>
+                  <label htmlFor="endTime">End Time:</label>
+                  <input type="time" id="endingTime" name="endTime" value={endingTime} className='border-[1px] rounded-md border-black p-3 text-sm' onChange={(e) => { setEndingTime(e.target.value)}} />
+                </div>
+              </div>
             </div>
 
             <div className=' h-[5vh] w-[75%] font-semibold  text-xl items-center lg:flex' hidden>

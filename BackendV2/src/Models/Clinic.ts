@@ -11,6 +11,7 @@ class Clinic extends Model {
   public fee!: number;
   public openingTime!: string;
   public closingTime!: string;
+  public address?: Address;
 }
 
 

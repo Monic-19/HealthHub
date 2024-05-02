@@ -11,7 +11,7 @@ const DoctorInfoBox = ({ doctor }) => {
     const navigate = useNavigate(); 
     const handleOpen = () => setOpen(!open);
 
-    const { profileImageUrl, education, userId } = doctor;
+    const { profileImageUrl, education, specialization, userId, user } = doctor;
     const [doctorInformation,setDoctorInformation] = useState();
     const [clinicInfo, setClinicInfo] = useState(null);
 
@@ -24,15 +24,6 @@ const DoctorInfoBox = ({ doctor }) => {
           console.error('Error fetching clinic information:', error);
         }
       };
-      const fetchDoctorInfo = async () => {
-        try{
-            const response = await axios.get(`http://localhost:8081/api/v1/personal-info/doctor/${userId}`);
-            setDoctorInformation(response.data);
-        }catch(error){
-            console.error('Error fetching doctor information:', error);
-        }
-      }
-      fetchDoctorInfo();
       fetchClinicInfo();
     }, []);
 
@@ -50,10 +41,10 @@ const DoctorInfoBox = ({ doctor }) => {
                 </CardHeader>
                 <CardBody className='h-[30%] '>
                     <Typography variant="h5" color="blue-gray" className="mb-2">
-                    {doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}
+                    {user?.firstName} {user?.lastName}
                     </Typography>
                     <Typography variant="paragraph" color="blue-gray" className="mb-0">
-                        {doctorInformation?.doctor?.specialization}
+                        {specialization}
                     </Typography>
                 </CardBody>
 
@@ -62,14 +53,14 @@ const DoctorInfoBox = ({ doctor }) => {
                         Show Details
                     </Button>
                     <Dialog open={open} handler={handleOpen}>
-                        <DialogHeader>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</DialogHeader>
+                        <DialogHeader>{user?.firstName} {user?.lastName}</DialogHeader>
                         <DialogBody>
 
-                            <i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is a highly skilled medical professional with a degree in <i>{doctorInformation?.doctor?.specialization}</i>.
-                            With extensive education from <i>{education}</i>,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> brings a wealth of knowledge and expertise to their practice.
-                            Specializing in <i>{doctorInformation?.doctor?.specialization}</i>,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is dedicated to providing personalized and compassionate care to each patient.
-                            <i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> employs the latest medical advancements and techniques to ensure the highest quality of care.
-                            Known for their meticulous attention to detail and commitment to excellence,<i>{doctorInformation?.user?.firstName} {doctorInformation?.user?.lastName}</i> is trusted by patients for their expertise and dedication to improving health outcomes.
+                            <i>{user?.firstName} {user?.lastName}</i> is a highly skilled medical professional with a degree in <i>{specialization}</i>.
+                            With extensive education from <i>{education}</i>,<i>{user?.firstName} {user?.lastName}</i> brings a wealth of knowledge and expertise to their practice.
+                            Specializing in <i>{specialization}</i>,<i>{user?.firstName} {user?.lastName}</i> is dedicated to providing personalized and compassionate care to each patient.
+                            <i>{user?.firstName} {user?.lastName}</i> employs the latest medical advancements and techniques to ensure the highest quality of care.
+                            Known for their meticulous attention to detail and commitment to excellence,<i>{user?.firstName} {user?.lastName}</i> is trusted by patients for their expertise and dedication to improving health outcomes.
 
                             <Typography variant="paragraph" color="blue-gray" className="mt-5">
                                 Clinic address - {clinicInfo?.address?.building + ', ' + clinicInfo?.address?.area + ', ' + clinicInfo?.address?.landmark + ', ' + clinicInfo?.address?.townCity + ', ' + clinicInfo?.address?.state}

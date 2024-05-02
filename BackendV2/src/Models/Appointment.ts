@@ -9,7 +9,7 @@ class Appointment extends Model {
   public date!: Date; 
   public time!: string; 
   public token!: string;
-  public description!: string;
+  public description!: string | null;
   public mode!: boolean;
   public videoLink!: string | null; 
 }
@@ -39,13 +39,17 @@ Appointment.init(
     },
     description:{
       type: DataTypes.STRING,
-      allowNull: false, 
+      allowNull: true, 
     },
     date: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    time: {
+    startingTime: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    endingTime: {
       type: DataTypes.STRING,
       allowNull: false,
     },
