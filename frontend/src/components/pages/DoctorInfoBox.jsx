@@ -3,6 +3,7 @@ import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Card, CardHeade
 import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 
 const DoctorInfoBox = ({ doctor }) => {
@@ -10,9 +11,10 @@ const DoctorInfoBox = ({ doctor }) => {
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate(); 
     const handleOpen = () => setOpen(!open);
+    const token = useSelector((state) => state.auth.token);
+    // console.log(token);
 
     const { profileImageUrl, education, specialization, userId, user } = doctor;
-    const [doctorInformation,setDoctorInformation] = useState();
     const [clinicInfo, setClinicInfo] = useState(null);
 
     useEffect(() => {
@@ -27,6 +29,14 @@ const DoctorInfoBox = ({ doctor }) => {
       fetchClinicInfo();
     }, []);
 
+    const handleBookAppointment = () => {
+        if (token) {
+            navigate(`/book/${user?.firstName} ${user?.lastName}`);
+        } else {
+            navigate('/login'); // Assuming the login page route is '/login'
+        }
+    };
+
     return (
         <motion.div   initial = {{opacity: 0, y : "10%"}}
         animate = {{opacity: 1, y : "0%"}}
@@ -34,7 +44,7 @@ const DoctorInfoBox = ({ doctor }) => {
             <Card className="my-6 mx-1 lg:w-[20vw] lg:h-[40vh] w-[75vw] cursor-pointer">
                 <CardHeader color="blue-gray" className="relative h-[50%] ">
                     <img
-                        src={profileImageUrl}
+                        src={user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg'}
                         alt="card-image"
                         className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
                     />
@@ -80,8 +90,8 @@ const DoctorInfoBox = ({ doctor }) => {
                             >
                                 <span>Go Back</span>
                             </Button>
-                            <Button variant="gradient" color="green" onClick={handleOpen}>
-                                <span onClick={() => { navigate(`/book/${doctorInformation?.user?.firstName} ${doctorInformation?.user?.lastName}`)}}>Book Appointment</span>
+                            <Button variant="gradient" color="green" onClick={handleBookAppointment}>
+                                <span>Book Appointment</span>
                             </Button>
                         </DialogFooter>
                     </Dialog>

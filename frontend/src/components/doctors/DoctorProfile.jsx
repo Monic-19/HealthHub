@@ -10,9 +10,9 @@ import { useSelector } from 'react-redux';
 const DoctorProfile = () => {
   const user = useSelector((state) => state.profile.user);
   const [doctorData,setDoctorData] = useState();
-  
+  console.log(user);
   const doctor_info = {
-    profileImageUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8ZG9jdG9yfGVufDB8fDB8fHww",
+    profileImageUrl: user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png':'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg',
   };
 
   useEffect(() => {

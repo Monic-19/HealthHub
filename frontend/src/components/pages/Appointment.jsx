@@ -89,7 +89,6 @@ const Appointment = () => {
     fetchAddresses();
   }, [filteredDoctors]);
 
-  console.log({address,filteredDoctors});
 
 
   return (
