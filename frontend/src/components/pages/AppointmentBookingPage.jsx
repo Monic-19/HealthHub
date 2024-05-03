@@ -8,7 +8,9 @@ import {
 } from "@material-tailwind/react";
 import { TiTick } from "react-icons/ti";
 import { Link, useNavigate } from "react-router-dom";
-import { easeIn, motion } from "framer-motion"
+import { easeIn, motion } from "framer-motion";
+import { useSelector } from "react-redux";
+
 
 function ComponentCard({
     title,
@@ -16,6 +18,7 @@ function ComponentCard({
     price,
     options,
 }) {
+    const appointmentInformation = useSelector((state) => state.appointment.appointmentsFee);
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.3 }}
@@ -51,8 +54,7 @@ function ComponentCard({
                         color="blue-gray"
                         className="mt-4 flex gap-1 !text-4xl"
                     >
-                        {price[0]}
-                        {price[1]}
+                        {appointmentInformation}
                         <Typography
                             as="span"
                             color="blue-gray"

@@ -6,13 +6,15 @@ import DoctorInfoBox from './DoctorInfoBox';
 import { motion } from "framer-motion";
 import Loader from "./Loader";
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setAppointmentTimeing } from '../../slices/appointmentSlice';
 
 
 const Appointment = () => {
   const [doctors, setDoctors] = useState([]);
   const [address, setAddress] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
-
+  const dispatch = useDispatch();
   const [category, setCategory] = useState('');
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
@@ -58,7 +60,13 @@ const Appointment = () => {
     }
 
     setFilteredDoctors(filtered);
-  },[category,state,city,doctorName])
+  },[category,state,city,doctorName]);
+
+  useEffect(() => {
+    if(startingTime != '' && endingTime != '' && date != ''){
+      dispatch(setAppointmentTimeing({date,startingTime,endingTime}));
+    }
+  },[date,startingTime,endingTime]);
 
 
   useEffect(() => {

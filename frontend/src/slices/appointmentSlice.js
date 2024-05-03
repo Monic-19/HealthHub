@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  appointments: [],
+  appointmentsFee: {},
+  appointmentTimeing: {},
   loading: false,
 };
 
@@ -10,8 +11,11 @@ const appointmentSlice = createSlice({
     name: "appointment",
     initialState: initialState,
     reducers: {
-      setAppointments(state, action) {
-        state.appointments = action.payload;
+      setAppointmentsFee(state, action) {
+        state.appointmentsFee = action.payload;
+      },
+      setAppointmentTimeing(state, action) {
+        state.appointmentTimeing = action.payload;
       },
       setLoading(state, action) {
         state.loading = action.payload;
@@ -19,6 +23,6 @@ const appointmentSlice = createSlice({
     },
 });
 
-export const { setAppointments, setLoading } = appointmentSlice.actions;
+export const { setAppointmentTimeing, setLoading, setAppointmentsFee } = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;

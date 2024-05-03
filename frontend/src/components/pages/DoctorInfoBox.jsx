@@ -3,19 +3,22 @@ import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Card, CardHeade
 import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAppointmentsFee } from '../../slices/appointmentSlice';
+
 
 
 const DoctorInfoBox = ({ doctor }) => {
 
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate(); 
+    const dispatch = useDispatch();
     const handleOpen = () => setOpen(!open);
     const token = useSelector((state) => state.auth.token);
-    // console.log(token);
 
-    const { profileImageUrl, education, specialization, userId, user } = doctor;
+    const { profileImageUrl, education, specialization, userId, user, clinic } = doctor;
     const [clinicInfo, setClinicInfo] = useState(null);
+    
 
     useEffect(() => {
       const fetchClinicInfo = async () => {
@@ -33,8 +36,9 @@ const DoctorInfoBox = ({ doctor }) => {
         if (token) {
             navigate(`/book/${user?.firstName} ${user?.lastName}`);
         } else {
-            navigate('/login'); // Assuming the login page route is '/login'
+            navigate('/login');
         }
+        dispatch(setAppointmentsFee(clinic.fee));
     };
 
     return (
