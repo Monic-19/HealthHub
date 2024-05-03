@@ -1,4 +1,4 @@
-# HealthHub
+# Smart HealthHub 
 
 Post Api To Insert Dummy Data into Database 
 http://localhost:8081/api/v1/insert/doctor
