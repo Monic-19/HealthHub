@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { FaSearch } from "react-icons/fa";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
+import { useNavigate } from 'react-router-dom';
 
 const DoctorAppointments = () => {
+  const navigate = useNavigate();
   const TABS = [
     {
       label: "All",
@@ -19,53 +21,58 @@ const DoctorAppointments = () => {
     },
   ];
 
-  const TABLE_HEAD = ["Member", "Type", "Date"];
+  const TABLE_HEAD = ["Member", "Type", "Date", "Time"];
 
   const TABLE_ROWS = [
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "John Michael",
+      name: "Doctor Ram Lal",
       email: "john@creative-tim.com",
       job: "Manager",
       org: "Organization",
       online: true,
       date: "23/04/18",
+      time: "09.00 AM",
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "Alexa Liras",
+      name: "Doctor Bhajan Lal",
       email: "alexa@creative-tim.com",
       job: "Programator",
       org: "Developer",
       online: false,
       date: "23/04/18",
+      time: "10.00 AM",
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "Laurent Perrier",
+      name: "Doctor Lucifer",
       email: "laurent@creative-tim.com",
       job: "Executive",
       org: "Projects",
       online: false,
       date: "19/09/17",
+      time: "11.00 AM",
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "Michael Levi",
+      name: "Doctor Ram Mohan",
       email: "michael@creative-tim.com",
       job: "Programator",
       org: "Developer",
       online: true,
       date: "24/12/08",
+      time: "12.00 PM",
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "Richard Gran",
+      name: "Doctor Raja Mohan",
       email: "richard@creative-tim.com",
       job: "Manager",
       org: "Executive",
       online: false,
       date: "04/10/21",
+      time: "01.00 PM",
     },
   ];
 
@@ -108,10 +115,10 @@ const DoctorAppointments = () => {
           <Card className="h-full w-full">
             <CardHeader floated={false} shadow={false} className="rounded-none ">
               <div className="flex flex-col items-center justify-between gap-4 md:flex-row ">
-                <motion.div 
-                     initial={{ x : -300, opacity : 0}}
-                     animate={{ x : 0, opacity : 1 }}
-                     transition={{ duration: 0.5 }}>
+                <motion.div
+                  initial={{ x: -300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5 }}>
                   <Tabs value="all" className="w-full md:w-max">
                     <TabsHeader>
                       {TABS.map(({ label, value }) => (
@@ -125,10 +132,10 @@ const DoctorAppointments = () => {
                   </Tabs>
 
                 </motion.div>
-                <motion.div 
-                     initial={{ x : 300, opacity : 0}}
-                     animate={{ x : 0, opacity : 1 }}
-                     transition={{ duration: 0.5 }}
+                <motion.div
+                  initial={{ x: 300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
                   className="w-full md:w-72">
                   <Input
                     label="Search"
@@ -161,17 +168,17 @@ const DoctorAppointments = () => {
                 </thead>
                 <tbody>
                   {sortedResults.map(
-                    ({ img, name, email, job, org, online, date }, index) => {
+                    ({ img, name, email, time, online, date }, index) => {
                       const isLast = index === sortedResults.length - 1;
                       const classes = isLast
                         ? "p-4"
                         : "p-4 border-b border-blue-gray-50";
 
                       return (
-                        <motion.tr 
-                        initial={{ y : -50, opacity : 0}}
-                        animate={{ y : 0, opacity : 1 }}
-                        transition={{ duration: 0.5 }}
+                        <motion.tr
+                          initial={{ y: -50, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.5 }}
                           key={name}>
                           <td className={classes}>
                             <div className="flex items-center gap-3">
@@ -212,6 +219,21 @@ const DoctorAppointments = () => {
                               className="font-normal"
                             >
                               {date}
+                            </Typography>
+                          </td>
+
+                          <td>
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {time} 
+                              {online ?
+                                <button onClick={() => navigate(`/call/${name.split(' ').join("")}/monic/doc`)}>
+                                  <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
+                                </button>
+                              : "" }
                             </Typography>
                           </td>
                           {/* <td className={classes}>

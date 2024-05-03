@@ -1,5 +1,5 @@
 import './App.css'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom' 
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import Login from './components/pages/Login'
 import Signup from './components/pages/Signup'
 import Error from './components/pages/Error'
@@ -26,61 +26,65 @@ import VerifyEmail from './components/pages/VerifyEmail'
 import DoctorClinicInfo from './components/doctors/DoctorClinicInfo'
 import AppointmentBookingPage from './components/pages/AppointmentBookingPage'
 import { useSelector } from 'react-redux'
+import ForgotPassword from './components/pages/ForgotPassword'
+import PatientCall from './components/pages/PatientCall'
 
 function App() {
-  const user  = useSelector((state) => state.profile.user);
+  const user = useSelector((state) => state.profile.user);
 
   return (
     <>
 
       <Router>
         <Routes>
-          <Route path='/' element={<Hero/>}/> 
-          <Route path='/login' element={<Login/>}/> 
-          <Route path='/signup' element={<Signup/>}/> 
-          <Route path='/verifyemail' element={<VerifyEmail/>}/> 
-          <Route path='/about' element={<About/>}/> 
-          <Route path='/contact' element={<Contact/>}/> 
-          <Route path='/appointment/:id' element={<Appointment/>}/> 
-          <Route path='/book/:id' element = {<AppointmentBookingPage/>}/>
-        
+          <Route path='/' element={<Hero />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/reset' element={<ForgotPassword />} />
+          <Route path='/verifyemail' element={<VerifyEmail />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/appointment/:id' element={<Appointment />} />
+          <Route path='/book/:id' element={<AppointmentBookingPage />} />
+
 
           {
             user?.role === "Doctor" && (
-            <Route path='/doctor' element={<DoctorDashboard/>}>
-              <Route path='profile' element={<DoctorProfile/>}></Route>
-              <Route path='info' element={<DoctorInfo/>}></Route>
-              <Route path='appointments' element={<DoctorAppointments/>}></Route>
-              <Route path='stats' element={<Stats/>}></Route>
-              <Route path='clinic' element={<DoctorClinicInfo/>}></Route>
-            </Route>
+              <Route path='/doctor' element={<DoctorDashboard />}>
+                <Route path='profile' element={<DoctorProfile />}></Route>
+                <Route path='info' element={<DoctorInfo />}></Route>
+                <Route path='appointments' element={<DoctorAppointments />}></Route>
+                <Route path='stats' element={<Stats />}></Route>
+                <Route path='clinic' element={<DoctorClinicInfo />}></Route>
+              </Route>
             )
           }
 
           {
             user?.role === "Admin" && (
-            <Route path='/admin' element={<AdminDashboard/>} >
-              <Route path={'profile'} element={<AdminProfile/> }/>
-              <Route path={'stats'} element={<AdminStats/> }/>
-              <Route path={'list'} element={<AdminDoctorsList/> }/>
-              <Route path={'alldoctors'} element={<AdminAllDoctorLists/> }/>
-            </Route>
+              <Route path='/admin' element={<AdminDashboard />} >
+                <Route path={'profile'} element={<AdminProfile />} />
+                <Route path={'stats'} element={<AdminStats />} />
+                <Route path={'list'} element={<AdminDoctorsList />} />
+                <Route path={'alldoctors'} element={<AdminAllDoctorLists />} />
+              </Route>
             )
           }
 
           {
-            user?.role === "Patient" && 
+            user?.role === "Patient" &&
             (
-              <Route path='/patient' element={<PatientDashboard/>} >
-                <Route path='appointments' element={<PatientAppointments/>}></Route>
-                <Route path='info' element={<PatientInfo/>}></Route>
-                <Route path='profile' element={<PatientProfile/>}></Route>
-                <Route path='stats' element={<PatientStats/>}></Route>
+              <Route path='/patient' element={<PatientDashboard />} >
+                <Route path='appointments' element={<PatientAppointments />}></Route>
+                <Route path='info' element={<PatientInfo />}></Route>
+                <Route path='profile' element={<PatientProfile />}></Route>
+                <Route path='stats' element={<PatientStats />}></Route>
               </Route>
             )
           }
-          
-          <Route path='*' element={<Error/>}/> 
+
+          <Route path='call/:doctorname/:patientname/:type' element={<PatientCall />}></Route>
+          <Route path='*' element={<Error />} />
         </Routes>
       </Router>
 
