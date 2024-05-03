@@ -60,14 +60,15 @@ const Login = () => {
                                     </div>
                                 </motion.div>
                                 <div>
-                                    <motion.div initial={initialMotion} animate={finalMotion} transition={{duration : 0.7}} className="flex items-center justify-between">
-                                        <label htmlFor="password" className="text-base font-medium text-gray-900">
+                                <motion.div initial={initialMotion} animate={finalMotion} transition={{duration : 0.7}} className="flex items-center justify-between">
+                                        <label htmlFor="" className="text-base font-medium text-gray-900">
                                             {' '}
                                             Password{' '}
                                         </label>
                                         <a href="#" title="" className="text-sm font-semibold text-black hover:underline">
                                             {' '}
-                                            Forgot password?{' '}
+                                            <Link to={"/reset"}>Forgot password?</Link>
+                                            {' '}
                                         </a>
                                     </motion.div>
 

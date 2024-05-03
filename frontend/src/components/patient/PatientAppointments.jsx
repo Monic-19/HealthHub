@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { FaSearch } from "react-icons/fa";
-import { Card, CardHeader, Input, Typography, CardBody, Chip, Button,CardFooter, Tabs, TabsHeader, Tab, Avatar, } from "@material-tailwind/react";
+import { Card, CardHeader, Input, Typography, CardBody, Chip, Button, CardFooter, Tabs, TabsHeader, Tab, Avatar, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
+import { useNavigate } from 'react-router-dom';
 
 const PatientAppointments = () => {
+  const navigate = useNavigate();
   const TABS = [
     {
       label: "All",
@@ -19,7 +21,7 @@ const PatientAppointments = () => {
     },
   ];
 
-  const TABLE_HEAD = ["Member", "Type", "Date"];
+  const TABLE_HEAD = ["Member", "Type", "Date", "Time"];
 
   const TABLE_ROWS = [
     {
@@ -27,30 +29,35 @@ const PatientAppointments = () => {
       name: "Doctor Ram Lal",
       online: true,
       date: "23/04/18",
+      time: "09.00 AM",
     },
     {
       img: "https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
       name: "Doctor Bhajan Lal",
       online: false,
       date: "23/04/18",
+      time: "10.00 AM",
     },
     {
       img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
       name: "Doctor Lucifer",
       online: false,
       date: "19/09/17",
+      time: "11.00 AM",
     },
     {
       img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
       name: "Doctor Ram Mohan",
       online: true,
       date: "24/12/08",
+      time: "12.00 PM",
     },
     {
       img: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yfGVufDB8fDB8fHww",
       name: "Doctor Raja Mohan",
       online: false,
       date: "04/10/21",
+      time: "01.00 PM",
     },
 
 
@@ -127,9 +134,9 @@ const PatientAppointments = () => {
               <tr>
                 {TABLE_HEAD.map((head) => (
                   <motion.th
-                  initial={{  opacity : 0}}
-                  animate={{ opacity : 1 }}
-                  transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
                     key={head}
                     className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
                   >
@@ -146,7 +153,7 @@ const PatientAppointments = () => {
             </thead>
             <tbody>
               {sortedResults.map(
-                ({ img, name, email, job, org, online, date }, index) => {
+                ({ img, name, online, date, time }, index) => {
                   const isLast = index === sortedResults.length - 1;
                   const classes = isLast
                     ? "p-4"
@@ -191,6 +198,21 @@ const PatientAppointments = () => {
                           className="font-normal"
                         >
                           {date}
+                        </Typography>
+                      </td>
+
+                      <td>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {time} &nbsp;
+                          {online ?
+                            <button onClick={() => navigate(`/call/${name.split(' ').join("")}/monic/pat`)}>
+                              <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
+                            </button>
+                            : ""}
                         </Typography>
                       </td>
                     </motion.tr>
