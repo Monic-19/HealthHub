@@ -28,6 +28,7 @@ import AppointmentBookingPage from './components/pages/AppointmentBookingPage'
 import { useSelector } from 'react-redux'
 import ForgotPassword from './components/pages/ForgotPassword'
 import PatientCall from './components/pages/PatientCall'
+import PrevReport from './components/pages/PrevReport'
 
 function App() {
   const user = useSelector((state) => state.profile.user);
@@ -82,7 +83,7 @@ function App() {
               </Route>
             )
           }
-
+          <Route path='report/:reportId' element={<PrevReport/>}/>
           <Route path='call/:doctorname/:patientname/:type' element={<PatientCall />}></Route>
           <Route path='*' element={<Error />} />
         </Routes>
