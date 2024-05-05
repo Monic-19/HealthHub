@@ -29,6 +29,7 @@ import { useSelector } from 'react-redux'
 import ForgotPassword from './components/pages/ForgotPassword'
 import PatientCall from './components/pages/PatientCall'
 import PrevReport from './components/pages/PrevReport'
+import WritePatientReport from './components/pages/WritePatientReport'
 
 function App() {
   const user = useSelector((state) => state.profile.user);
@@ -84,6 +85,7 @@ function App() {
             )
           }
           <Route path='report/:reportId' element={<PrevReport/>}/>
+          <Route path='report/write/:reportId' element={<WritePatientReport/>}/>
           <Route path='call/:doctorname/:patientname/:type' element={<PatientCall />}></Route>
           <Route path='*' element={<Error />} />
         </Routes>

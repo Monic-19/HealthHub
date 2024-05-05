@@ -36,7 +36,7 @@ const DoctorAppointments = () => {
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "Doctor Bhajan Lal",
+      name: "Bhajan Lal",
       email: "alexa@creative-tim.com",
       job: "Programator",
       org: "Developer",
@@ -46,7 +46,7 @@ const DoctorAppointments = () => {
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "Doctor Lucifer",
+      name: "Lucifer",
       email: "laurent@creative-tim.com",
       job: "Executive",
       org: "Projects",
@@ -56,7 +56,7 @@ const DoctorAppointments = () => {
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "Doctor Ram Mohan",
+      name: "Ram Mohan",
       email: "michael@creative-tim.com",
       job: "Programator",
       org: "Developer",
@@ -66,7 +66,7 @@ const DoctorAppointments = () => {
     },
     {
       img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "Doctor Raja Mohan",
+      name: "Raja Mohan",
       email: "richard@creative-tim.com",
       job: "Manager",
       org: "Executive",
@@ -228,12 +228,16 @@ const DoctorAppointments = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {time} 
+                              {time}
                               {online ?
                                 <button onClick={() => navigate(`/call/${name.split(' ').join("")}/monic/doc`)}>
                                   <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
                                 </button>
-                              : "" }
+                                :
+                                <button onClick={() => navigate(`/report/write/${name}`)}>
+                                  <span className='text-blue-600 hover:text-blue-800 ml-4'>{"write review"}</span>
+                                </button>
+                              }
                             </Typography>
                           </td>
                           {/* <td className={classes}>

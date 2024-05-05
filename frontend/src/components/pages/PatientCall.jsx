@@ -73,42 +73,59 @@ const PatientCall = () => {
 
       <button className='absolute lg:top-[85vh] top-[55vh] lg:left-[43vw]  rounded-md bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(-1)}>Go Back</button>
 
-      <div className='absolute top-[63vh] bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
-        <Box
-          sx={{
-            width: 250,
-            display: 'flex',
-            alignItems: 'center',
-            gap: "1.5vw"
-          }}
-        >
-          <Rating
-            name="hover-feedback"
-            value={value}
-            precision={0.5}
-            getLabelText={getLabelText}
+      {
+        type == "pat" ?
+          (
+            <div className='absolute top-0 left-[40vw]'>
+              <div className='absolute top-[63vh] bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
+                <Box
+                  sx={{
+                    width: 250,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: "1.5vw"
+                  }}
+                >
+                  <Rating
+                    name="hover-feedback"
+                    value={value}
+                    precision={0.5}
+                    getLabelText={getLabelText}
 
-            onChange={(event, newValue) => {
-              setValue(newValue);
-            }}
+                    onChange={(event, newValue) => {
+                      setValue(newValue);
+                    }}
 
-            onChangeActive={(event, newHover) => {
-              setHover(newHover);
-            }}
+                    onChangeActive={(event, newHover) => {
+                      setHover(newHover);
+                    }}
 
-            emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="medium" />}
-            icon={<StarIcon style={{ opacity: 1 }} fontSize="medium" />}
-          />
+                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="medium" />}
+                    icon={<StarIcon style={{ opacity: 1 }} fontSize="medium" />}
+                  />
 
-          {value !== null && (
-            <Box sx={{ ml: 2, color: "white", fontSize: "2vh" }}>{labels[hover !== -1 ? hover : value]}</Box>
-          )}
-        </Box>
-      </div>
+                  {value !== null && (
+                    <Box sx={{ ml: 2, color: "white", fontSize: "2vh" }}>{labels[hover !== -1 ? hover : value]}</Box>
+                  )}
+                </Box>
+              </div>
 
-      <div className="absolute top-[70vh] flex w-72 flex-col gap-6">
-        <Textarea color='blue' label="please give your doctor a feedback" />
-      </div>
+              <div className="absolute top-[70vh] flex w-72 flex-col gap-6">
+                <Textarea color='blue' label="please give your doctor a feedback" />
+              </div>
+            </div>
+          )
+          :
+          (
+            <div className='absolute top-0 left-0'>
+              <button className='absolute w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
+                Write Patient Report
+              </button>
+            </div>
+          )
+      }
+
+
 
       <div className='h-full w-full' ref={myMeeting} />
     </div>
