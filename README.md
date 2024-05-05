@@ -192,3 +192,4 @@ http://localhost:8081/api/v1/insert/doctor
     "openingTime": "01:43",
     "closingTime": "02:00"
 }
+new
