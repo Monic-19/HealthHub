@@ -4,7 +4,8 @@ import {motion} from "framer-motion"
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { setAppointmentsFee } from '../../slices/appointmentSlice';
+import { setAppointmentsFee, setAppointmentBetween } from '../../slices/appointmentSlice';
+import toast from 'react-hot-toast';
 
 
 
@@ -15,6 +16,9 @@ const DoctorInfoBox = ({ doctor }) => {
     const dispatch = useDispatch();
     const handleOpen = () => setOpen(!open);
     const token = useSelector((state) => state.auth.token);
+    const patientId = useSelector((state) => state.profile.user); 
+    const appointmentTimeing = useSelector((state) => state.appointment.appointmentTimeing);
+    const [errorMessage,setErrorMessage] = useState();
 
     const { profileImageUrl, education, specialization, userId, user, clinic } = doctor;
     const [clinicInfo, setClinicInfo] = useState(null);
@@ -33,9 +37,14 @@ const DoctorInfoBox = ({ doctor }) => {
     }, []);
 
     const handleBookAppointment = () => {
-        if (token) {
+        if (token && patientId.role == 'Patient' && appointmentTimeing.startingTime && appointmentTimeing.endingTime && appointmentTimeing.date) {
             navigate(`/book/${user?.firstName} ${user?.lastName}`);
-        } else {
+            dispatch(setAppointmentBetween({doctorId: user.id,patientId: patientId.id}))
+        }
+        else if(token && patientId.role == 'Patient'){
+            setErrorMessage('Enter Timeing');
+        } 
+        else {
             navigate('/login');
         }
         dispatch(setAppointmentsFee(clinic.fee));
@@ -97,6 +106,7 @@ const DoctorInfoBox = ({ doctor }) => {
                             <Button variant="gradient" color="green" onClick={handleBookAppointment}>
                                 <span>Book Appointment</span>
                             </Button>
+                            {errorMessage}
                         </DialogFooter>
                     </Dialog>
 

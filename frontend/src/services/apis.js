@@ -8,7 +8,7 @@ export const authEndpoints = {
 }
 
 export const appointmentEndpoints = {
-    CREATE_APPOINTMENT: BASE_URL + "/appointments/create",
+    CREATE_APPOINTMENT: BASE_URL + "/appointment/create",
     REMOVE_APPOINTMENT: BASE_URL + "/appointments",
     GET_APPOINTMENTS_BOOKED_BY_PATIENT: BASE_URL + "/appointments/patient",
     GET_APPOINTMENTS_BOOKED_FOR_DOCTOR: BASE_URL + "/appointments/doctor",

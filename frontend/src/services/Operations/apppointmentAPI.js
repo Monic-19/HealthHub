@@ -10,7 +10,11 @@ export function createAppointment(
     doctorId,
     description,
     date,
-    time
+    mode,
+    startingTime,
+    endingTime,
+    videoLink,
+    navigate
 ){
     return async (dispatch) => {
         dispatch(setLoading(true));
@@ -20,16 +24,20 @@ export function createAppointment(
                 doctorId,
                 description,
                 date,
-                time
+                mode,
+                startingTime,
+                endingTime,
+                videoLink,
             });
 
             console.log("CREATE_APPOINTMENT API RESPONSE............", response)
   
-            if (!response.data.success) {
-              throw new Error(response.data.message)
+            if (response.status != 200) {
+                throw new Error(response.data.message)
             }
     
             toast.success("Appointment Booked");
+            navigate('/patient/appointments');
         } catch(error){
             console.log("CREATE_APPOINTMENT API ERROR............", error);
             toast.error("Appointment does not booked");

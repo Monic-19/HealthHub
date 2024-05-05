@@ -62,7 +62,7 @@ Appointment.init(
       allowNull: true, 
     },
     token: {
-      type: DataTypes.STRING, 
+      type: DataTypes.STRING(512), 
       allowNull: false,
       defaultValue: () => Math.random().toString(36).slice(2),
     }

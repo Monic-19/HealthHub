@@ -11,11 +11,12 @@ const createAppointment = async (req: Request, res: Response) => {
         const doctor = User.findOne({where: {id: doctorId}});
         const patient = User.findOne({where: {id: patientId}});
 
-        if(!date || !startingTime || !endingTime || !mode){
-            return res.status(404).json({
-                message: "Incomplete credentials",
-            })
-        }
+        // if(!date || !startingTime || !endingTime || !mode){
+        //     return res.status(404).json({
+        //         success: false,
+        //         message: "Incomplete credential",
+        //     })
+        // }
 
         if(!doctor || !patient){
             return res.status(404).json({
@@ -24,10 +25,17 @@ const createAppointment = async (req: Request, res: Response) => {
             })
         }
 
-        const appointment = await Appointment.create({ doctorId, patientId, description, date, startingTime, endingTime, mode });
-        const token = jwt.sign({ appointmentId: appointment.id }, 'your_secret_key');
+        const appointment = await Appointment.create({ doctorId, patientId, date, startingTime, endingTime, mode });
+        if(description){
+            await appointment.update({ description }, { where: { id: appointment.id } });    
+        }
+
+        const token = jwt.sign({ appointment: appointment.id}, 'your_secret_key');
+        await appointment.update({ token }, { where: { id: appointment.id } });
+
+
         if (mode == true && videoLink !== null) {
-            await appointment.update({ videoLink, token }, { where: { id: appointment.id } });
+            await appointment.update({ videoLink }, { where: { id: appointment.id } });
         }
 
         res.status(200).json({ token, appointment });
