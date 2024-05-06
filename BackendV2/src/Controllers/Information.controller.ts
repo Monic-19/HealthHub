@@ -4,6 +4,45 @@ import User from "../Models/User";
 import Doctor from "../Models/Doctor";
 import { sequelize } from "../Config/sequelize";
 import Clinic from "../Models/Clinic";
+import cloudinary from 'cloudinary'
+
+
+cloudinary.v2.config({
+    cloud_name: 'dtpuvzwyu',
+    api_key: '443257453111698',
+    api_secret: 'G_tLJ1hpiFytfIIhQY9Su9ZnQZw',
+});
+
+const saveProfilePic = async(req: Request,res: Response) => {
+    try {  
+        
+        const { userId } =  req.params;
+        
+        if (!req.file || !req.file.path) {
+          return res.status(400).json({ message: 'Photo upload failed' });
+        }
+
+        let user = await User.findOne({where: {id: userId}});
+        if(!user){
+            return res.status(304).json({
+                message: 'Not a valid user',
+            })
+        }
+    
+        const uploadedPhoto = await cloudinary.v2.uploader.upload(req.file.path);    
+        
+        await User.update({profileImg: uploadedPhoto.secure_url},{where: {id: userId}});
+
+        user = await User.findOne({where: {id:userId}});
+        return res.status(200).json({
+            user,
+            message: 'User photo uploaded successfully',
+        })
+
+      } catch (error) {
+        res.status(500).json({ message: 'Internal server error' ,error});
+      }
+}
 
 const saveDoctorInformation = async (req: Request, res: Response) => {
     const transaction = await sequelize.transaction();
@@ -49,7 +88,7 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
             });
         }
 
-        const user = await User.findByPk(userId, { transaction });
+        let user = await User.findByPk(userId, { transaction });
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -118,13 +157,14 @@ const saveDoctorInformation = async (req: Request, res: Response) => {
         }); 
 
         await transaction.commit();
-
+        
+        user = await User.findOne({where: {id:userId}});
         return res.status(200).json({
+            user,
             success: true,
             message: 'Doctor information saved successfully',
         });
     } catch (error) {
-        console.error('Error saving doctor information:', error);
         return res.status(500).json({
             success: false,
             error: 'Internal server error',
@@ -155,7 +195,7 @@ const savePatientInformation = async (req: Request, res: Response) => {
             });
         }
 
-        const user = await User.findByPk(userId, { transaction });
+        let user = await User.findByPk(userId, { transaction });
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -192,8 +232,10 @@ const savePatientInformation = async (req: Request, res: Response) => {
         }); 
 
         await transaction.commit();
-
+        
+        user = await User.findOne({where: {id:userId}});
         return res.status(200).json({
+            user,
             success: true,
             message: 'Patient information saved successfully',
         });
@@ -384,4 +426,4 @@ const getPatientInformation = async(req: Request, res: Response) => {
     }
 } 
 
-export { saveDoctorInformation, savePatientInformation, saveClinicInformation , getPatientInformation, getDoctorInformation, getClinicInformation };
+export { saveDoctorInformation, savePatientInformation, saveClinicInformation , getPatientInformation, getDoctorInformation, getClinicInformation, saveProfilePic };

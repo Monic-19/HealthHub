@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Avatar } from "@material-tailwind/react";
 import { IoIosStarOutline } from "react-icons/io";
 import Chart from 'react-apexcharts';
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-
 const DoctorProfile = () => {
   const user = useSelector((state) => state.profile.user);
-  const [doctorData,setDoctorData] = useState();
-  console.log(user);
-  const doctor_info = {
-    profileImageUrl: user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png':'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg',
-  };
+  const [doctorData, setDoctorData] = useState();
+  const [image,SetImage] = useState(user.profileImg);
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -23,17 +20,37 @@ const DoctorProfile = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-  }
+    }
 
     fetchData();
-  },[user.id])
+  }, [user.id]);
 
   const [verified, setVerified] = useState(true);
 
-  const series = [4000,2000, 430 , 240];
+  const series = [4000, 2000, 430, 240];
   const options = {
     labels: ['Total Online Patients', 'Total Offline Patients', 'This Months Online Patients', 'This Months Offline Patients'],
   }
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    axios.post(`http://localhost:8081/api/v1/personal-info/profile-pic/${user.id}`, formData)
+      .then(response => {
+        console.log(response);
+        if (response.status === 200) {
+          SetImage(response?.data?.user?.profileImg);
+          localStorage.setItem('user', JSON.stringify(response?.data?.user));
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
   
 
   return (
@@ -44,12 +61,21 @@ const DoctorProfile = () => {
 
           <div className='p-5 relative'>
 
-            <motion.div 
-              initial = {{opacity: 0, scale : 0}} 
-              animate = {{opacity: 1, scale : 1}} 
-              transition={{  duration : .5}}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: .5 }}
               className=' lg:w-[35vw] w-[90%] rounded-lg shadow-xl lg:h-[18vh] h-[22vh] flex justify-center items-center lg:gap-[4vw] gap-[10vw] p-4 bg-gray-200 cursor-pointer absolute top-[5vh] left-[2vh] font-mono'>
-              <Avatar src={doctor_info.profileImageUrl} alt="avatar" size="xxl" withBorder={true} className="p-0.5" />
+              <label htmlFor="avatarInput" style={{ cursor: 'pointer' }}>
+                <Avatar src={image != undefined ? image : (user?.gender === 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg')} alt="avatar" size="xxl" withBorder={true} className="p-0.5" />
+                <input
+                  type="file"
+                  id="avatarInput"
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </label>
               <div className='h-full text-lg '>
                 {user?.firstName && user?.lastName && <h1>Dr {user?.firstName} {user?.lastName}</h1>}
                 {doctorData?.doctor?.specialization && <h1>{doctorData?.doctor?.specialization}</h1>}
@@ -58,10 +84,10 @@ const DoctorProfile = () => {
               </div>
             </motion.div>
 
-            <motion.div 
-                 initial = {{opacity: 0, scale : 0}} 
-                 animate = {{opacity: 1, scale : 1}} 
-                 transition={{  duration : 1}}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
               className='h-[10vh] bg-gray-900 rounded-lg lg:w-[25vw]
              absolute lg:top-[9vh] lg:left-[40vw] top-[32vh] left-[10vw] shadow-xl p-6 text-xl font-mono'>
               <div className='flex items-center gap-4'>
@@ -89,9 +115,8 @@ const DoctorProfile = () => {
         </div>
       )}
 
-
     </div>
   )
 }
 
-export default DoctorProfile
+export default DoctorProfile;

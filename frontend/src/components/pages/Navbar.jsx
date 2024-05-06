@@ -28,7 +28,7 @@ const Navbar = () => {
         <NavLink to={"/about"} className='hover:font-extrabold lg:m-0 mx-4'>About</NavLink>
         <NavLink to={"/appointment/all"} className='hover:font-extrabold'>Appointment</NavLink>
         {
-          token && <NavLink to={`/${user.role}/profile`} className='hover:font-extrabold'>Dashboard</NavLink> 
+          token && <NavLink to={`/${user?.role}/profile`} className='hover:font-extrabold'>Dashboard</NavLink> 
         }
         {
           !token && <NavLink to="/login" className='hover:font-extrabold'>Login</NavLink>

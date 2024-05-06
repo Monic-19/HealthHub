@@ -68,14 +68,6 @@ const PatientInfo = () => {
               />
               {errors.mobileNumber && <span>This field is required</span>}
 
-              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                Profile Photo
-              </Typography>
-              <Input
-                type="file"
-                size="lg"
-                {...register("profilePhoto")}
-              />
 
               <Typography variant="h6" color="blue-gray" className="-mb-3">
                 DOB

@@ -19,8 +19,10 @@ const DoctorInfoBox = ({ doctor }) => {
     const patientId = useSelector((state) => state.profile.user); 
     const appointmentTimeing = useSelector((state) => state.appointment.appointmentTimeing);
     const [errorMessage,setErrorMessage] = useState();
-
+    
     const { profileImageUrl, education, specialization, userId, user, clinic } = doctor;
+    const [image,SetImage] = useState(user.profileImg);
+
     const [clinicInfo, setClinicInfo] = useState(null);
     
 
@@ -57,7 +59,7 @@ const DoctorInfoBox = ({ doctor }) => {
             <Card className="my-6 mx-1 lg:w-[20vw] lg:h-[40vh] w-[75vw] cursor-pointer">
                 <CardHeader color="blue-gray" className="relative h-[50%] ">
                     <img
-                        src={user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg'}
+                        src={image != undefined ? image : (user?.gender === 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg')}
                         alt="card-image"
                         className="object-cover w-full h-full transition-transform duration-500 hover:scale-110"
                     />

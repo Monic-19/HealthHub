@@ -133,4 +133,59 @@ const verificationEmail = async (req: Request, res: Response) => {
     }
 }
 
-export { SignUp, login, sendOtp, verificationEmail };
+const changePassword = async (req: Request, res: Response) => {
+    try {
+        const { email, newPassword, confirmNewPassword, oldPassword } = req.body;
+
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({ success: false, error: 'New passwords do not match' });
+        }
+
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, error: 'Incorrect old password' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error changing password:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+};
+
+const forgotPassword = async (req: Request, res: Response) => {
+    try {
+        const { email, newPassword, confirmNewPassword } = req.body;
+
+        if (newPassword !== confirmNewPassword) {
+            return res.status(400).json({ success: false, error: 'New passwords do not match' });
+        }
+
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+};
+
+export { SignUp, login, sendOtp, verificationEmail, forgotPassword, changePassword };

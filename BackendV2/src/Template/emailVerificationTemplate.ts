@@ -31,6 +31,7 @@ export const emailVerificationTemplate = async (OTP: { otp: number }) => {
                 padding: 1.5rem;
                 background-color: #dbeafe;
                 margin-bottom: 1.5rem;
+                border-radius: 2vh;
             }
     
             .logo {
@@ -38,28 +39,33 @@ export const emailVerificationTemplate = async (OTP: { otp: number }) => {
                 margin: auto;
                 width: 400px;
                 height: auto;
+                border-radius: 2vh;
             }
     
             .message {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
                 font-weight: bold;
                 color: #2563eb;
                 text-align: center;
                 margin-top: 1.5rem;
+                letter-spacing: 3px;
             }
     
             .otp {
                 display: flex;
+                justify-content: center;
+                align-items: center;
                 gap: 20px;
+                font : bold;
                 margin-top: 1rem;
             }
     
-            .otp .border {
+            .border {
                 border: 1px solid #3b82f6;
                 border-radius: 0.5rem;
             }
     
-            .otp .p-4 {
+            .p-4 {
                 padding: 1rem;
             }
     
@@ -68,19 +74,37 @@ export const emailVerificationTemplate = async (OTP: { otp: number }) => {
                 color: #4b5563;
                 text-align: center;
                 margin-top: 1.5rem;
+                font-style: italic;
             }
     
             .support a {
                 color: #3b82f6;
             }
+            .welcome-message {
+             
+                color: #010033;
+                width: 95%;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+                font-size: x-large;
+                line-height: 3vh;
+                letter-spacing: 2px;
+            }
+
+            span{
+                color: #04ABFF;
+            }
+
         </style>
     </head>
     
     <body>
         <div class="container">
             <div class="top-div">
-                <img class="logo" src="https://i.ibb.co/09sZrYC/cover.png" alt="HealthHub Logo">
+                <img class="logo" src="https://i.ibb.co/09sZrYC/cover.png" alt="HealthHub Logo" loading="lazy">
                 <div class="message">OTP Confirmation</div>
+                <h3 class="welcome-message">Welcome to <span>Health Hub,</span><br> Please verify your email  <br>and be a part of our family. </h3>
                 <div class="otp">
                     <span class="border p-4">${placeholders[0]}</span>
                     <span class="border p-4">${placeholders[1]}</span>

@@ -4,16 +4,26 @@ import User from "../Models/User";
 
 const createReview = async (req: Request, res: Response) => {
   try {
-    const { userId, rating, comment } = req.body;
+    const { patientId, doctorId, rating, comment } = req.body;
 
-    if(!userId || !rating){
-        return res.status(404).json({
-            message: 'Incomplete credentials',
-        })
+    if(!patientId || !rating || !doctorId){
+      return res.status(404).json({
+        message: 'Incomplete credentials',
+      })
+    }
+
+    const patient = await User.findOne({where: {id: patientId}});
+    const doctor = await User.findOne({where: {id: doctorId}});
+
+    if(!patient || !doctor){
+      return res.status(404).json({
+        Message: 'Patient and doctor not exists'
+      });
     }
 
     const review = await Review.create({
-      userId,
+      patientId,
+      doctorId,
       rating,
       comment
     });
@@ -46,11 +56,11 @@ const deleteReview = async (req: Request, res: Response) => {
   }
 };
 
-const getReviewsByUserId = async (req: Request, res: Response) => {
+const getReviewsByPatientId = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userId;
+    const patientId = req.params.patientId;
 
-    const user = await User.findOne({where: {id: userId}});
+    const user = await User.findOne({where: {id: patientId}});
     if(!user){
         return res.status(404).json({
             message: "User not present",
@@ -58,7 +68,7 @@ const getReviewsByUserId = async (req: Request, res: Response) => {
     }
     const reviews = await Review.findAll({
       where: {
-        userId: userId
+        userId: patientId
       }
     });
 
@@ -69,4 +79,28 @@ const getReviewsByUserId = async (req: Request, res: Response) => {
   }
 };
 
-export { createReview, deleteReview, getReviewsByUserId };
+
+const getReviewsByDoctorId = async (req: Request, res: Response) => {
+  try {
+    const doctorId = req.params.doctorId;
+
+    const user = await User.findOne({where: {id: doctorId}});
+    if(!user){
+        return res.status(404).json({
+            message: "User not present",
+        });
+    }
+    const reviews = await Review.findAll({
+      where: {
+        userId: doctorId
+      }
+    });
+
+    return res.status(200).json(reviews);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    return res.status(500).json({ error: 'Could not fetch reviews' });
+  }
+};
+
+export { createReview, deleteReview, getReviewsByPatientId, getReviewsByDoctorId };

@@ -5,6 +5,7 @@ import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
 import { Textarea } from "@material-tailwind/react";
+import axios from 'axios';
 
 const labels = {
   0.5: 'Useless',
@@ -23,13 +24,37 @@ function getLabelText(value) {
   return `${value} Star${value !== 1 ? 's' : ''}, ${labels[value]}`;
 }
 
+
 const PatientCall = () => {
 
   const { patientname, doctorname, type } = useParams()
+
   const navigate = useNavigate();
 
-  const [value, setValue] = React.useState(2);
+  const [value, setValue] = React.useState(2.5);
   const [hover, setHover] = React.useState(-1);
+
+  const [feedback , setFeedback] = React.useState("");
+
+  function submitRating(){
+    console.log(value);
+    console.log(feedback);
+
+    axios.post('http://localhost:8081/api/v1/review/create', {
+      patientId: patientname.split('-')[1],
+      doctorId: doctorname.split('-')[1],
+      rating: value,
+      comment: feedback
+    })
+    .then(response => {
+        console.log('Review submitted successfully:', response.data);
+    })
+    .catch(error => {
+        console.error('Error submitting review:', error);
+    });
+
+    setFeedback("");
+  }
 
   const myMeeting = async (element) => {
     const roomID = patientname + doctorname;
@@ -54,7 +79,7 @@ const PatientCall = () => {
         sharedLinks: [
           {
             name: "Copy Link",
-            url: `http://localhost:5173/call/${doctorname}/${patientname}`,
+            url: `http://localhost:5173/call/${doctorname}/${patientname}/pat`,
           },
 
         ],
@@ -77,7 +102,7 @@ const PatientCall = () => {
         type == "pat" ?
           (
             <div className='absolute top-0 left-[40vw]'>
-              <div className='absolute top-[63vh] bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
+              <div className='absolute top-[67.5vh] -left-[23vw] bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
                 <Box
                   sx={{
                     width: 250,
@@ -110,9 +135,13 @@ const PatientCall = () => {
                 </Box>
               </div>
 
-              <div className="absolute top-[70vh] flex w-72 flex-col gap-6">
-                <Textarea color='blue' label="please give your doctor a feedback" />
+              <div className="absolute top-[65vh] flex w-72 flex-col gap-6">
+                <Textarea color='blue' label="please give your doctor a feedback" onChange={(e) => {setFeedback(e.target.value)}}/>
               </div>
+
+              <button className='absolute w-[20vw] lg:top-[67.5vh] top-[55vh] left-[23vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={submitRating}>
+              Submit feedback
+            </button>
             </div>
           )
           :

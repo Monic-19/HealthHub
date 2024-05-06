@@ -1,10 +1,10 @@
-export const appointmentConfirmation = ({ PatientName, DoctorName, videoLink, Date, startingTime, endingTime, phoneNo }: { PatientName: string, DoctorName: string, videoLink: string, Date: string, startingTime: string, endingTime: string, phoneNo: string }) => {
+export const appointmentDoctor = ({ PatientName, DoctorName, videoLink }: { PatientName: string, DoctorName: string, videoLink: string}) => {
     return `<!DOCTYPE html>
     <html>
     
     <head>
         <meta charset="UTF-8">
-        <title>Course Registration Confirmation</title>
+        <title>Appoitment Confirmation</title>
     </head>
     
     <body style="background-color: #fff;">
@@ -18,19 +18,9 @@ export const appointmentConfirmation = ({ PatientName, DoctorName, videoLink, Da
     
                 <div style="font-size: 1.5rem; font-weight: bold; color: #2563eb; text-align: center; margin-top: 1.5rem; letter-spacing: 3px;" class="text-2xl my-5 font-bold text-[#010033]">Appointment Confirmation</div>
                 <div style="font-size: 1rem; color: #4b5563; text-align: center; margin-top: 1.5rem; font-style: italic;" class="text-lg mb-5">  
-                    <p>Dear ${PatientName},</p>
-                    <p>
-                        You have successfully booked an appointment with <span style="font-weight: bold; color: #010033;">"${DoctorName}"</span>.
-                    </p>
-                    <p>
-                        Appointment Details : &nbsp;
-                        Date <span style="font-weight: bold; color: #010033;">"${Date}"</span> &nbsp;
-                        Time <span style="font-weight: bold; color: #010033;">"${startingTime} to ${endingTime}"</span>
-                    </p>
-                    <p>
-                        Phone number: ${phoneNo}
-                        ${videoLink ? `<p>Meeting link ${videoLink}</p>` : " "}
-                    </p>
+                    <p>Dear ${DoctorName},</p>
+                    <p>You have an appoitment with patient ${PatientName}</p>
+                    ${videoLink ? `<p>Meeting link ${videoLink}</p>` : " "}
                 </div>
                 <div style="font-size: 0.875rem; color: #4b5563; text-align: center; margin-top: 1.5rem; font-style: italic;" class="text-sm text-gray-600 italic">
                     If you have any questions or need assistance, please feel free to reach out to us at <a href="mailto:wdevelopment296@gmail.com" class="text-blue-600">wdevelopment296@gmail.com</a>. We are here to help!

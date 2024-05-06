@@ -6,12 +6,14 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../services/Operations/authAPI';
 import { useNavigate } from 'react-router-dom';
 import { List, ListItem } from "@material-tailwind/react";
+import axios from 'axios';
 
 const PatientProfile = () => {
   const user = useSelector((state) => state.profile.user);
   const [name, SetName] = useState(`${user.firstName} ${user.lastName}`);
 
-  const [image, SetImage] = useState("https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.1818581771.1714327882&semt=sph");
+  const [image, SetImage] = useState(user?.profileImg);
+  console.log(user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -25,10 +27,24 @@ const PatientProfile = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      SetImage(URL.createObjectURL(file));
-    }
+    const formData = new FormData();
+    formData.append('image', file);
+  
+    axios.post(`http://localhost:8081/api/v1/personal-info/profile-pic/${user.id}`, formData)
+      .then(response => {
+        console.log(response);
+        if (response.status === 200) {
+          SetImage(response?.data?.user?.profileImg);
+          localStorage.setItem('user', JSON.stringify(response?.data?.user));
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
   };
+  
 
 
   return (
@@ -60,7 +76,7 @@ const PatientProfile = () => {
 
               {image ? (
                 <img
-                  src={image}
+                  src={user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg'}
                   alt="Profile Preview"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
@@ -135,7 +151,7 @@ const PatientProfile = () => {
               variant="circular"
               alt="tania andrew"
               className="border-2 border-white"
-              src={image}
+              src={image != undefined ? image : (user?.gender === 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg')}
             />
           </CardBody>
         </Card>

@@ -19,7 +19,15 @@ Review.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    userId: {
+    patientId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: 'id'
+      }
+    },
+    doctorId:{
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -46,5 +54,6 @@ Review.init(
   }
 );
 
-Review.belongsTo(User, { foreignKey: 'userId', as: 'user' }); 
+Review.belongsTo(User, { foreignKey: 'patientId', as: 'patient' }); 
+Review.belongsTo(User, { foreignKey: 'doctorId', as: 'doctor' }); 
 export default Review;
