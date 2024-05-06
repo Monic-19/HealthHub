@@ -30,6 +30,20 @@
 - **Query Parameters:** Token for email verification.
 - **Response:** Success message or error.
 
+### Change Password
+- **URL:** `/api/v1/auth/change-password`
+- **Method:** `PUT`
+- **Description:** Change the password of the user.
+- **Request Body:** Email, oldPassword, newPassword, confirmNewPassword.
+- **Response:** Success message or error.
+
+### Forgot Password
+- **URL:** `/api/v1/auth/forgot-password`
+- **Method:** `PUT`
+- **Description:** Reset the password if the user has forgotten it.
+- **Request Body:** Email, newPassword, confirmNewPassword.
+- **Response:** Success message or error.
+
 ## Document Routes
 
 ### Upload Document
