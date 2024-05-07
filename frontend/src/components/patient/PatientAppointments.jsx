@@ -101,7 +101,7 @@ const PatientAppointments = () => {
     const fetchAppointments = async () => {
       try {
         if(user){
-          const response = await axios.get(`http://localhost:8081/api/v1/appointment/patient/13`);
+          const response = await axios.get(`http://localhost:8081/api/v1/appointment/patient/${user.id}`);
           setAppointments(response.data.appointments);
           setSortedResults(response.data.appointments);
         }
@@ -113,6 +113,9 @@ const PatientAppointments = () => {
     
     fetchAppointments();
   }, []);
+
+  console.log(appointments)
+  console.log(sortedResults)
 
   return (
     <div>
@@ -231,7 +234,7 @@ const PatientAppointments = () => {
                         >
                           {startingTime + ' to ' + endingTime} &nbsp;
                           {mode ?
-                            <button onClick={() => navigate(`/call/${doctor.firstName}-${doctor.id}/${patient.firstName}-${patient.id}/pat`)}>
+                            <button onClick={() => navigate(`/call/${doctor.firstName.split(" ").join("")}-${doctor.id}/${patient.firstName.split(" ").join("")}-${patient.id}/pat`)}>
                               <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
                             </button>
                             : ""}
