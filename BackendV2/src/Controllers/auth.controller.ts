@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import User from '../Models/User';
 import OTP from '../Models/OTP';
 import { Op } from 'sequelize';
+import { ForgotPassword } from '../Template/ForgotPassword';
+import mailSender from '../utils/mailSender';
 
 
 interface UserType {
@@ -163,6 +165,37 @@ const changePassword = async (req: Request, res: Response) => {
     }
 };
 
+const forgotPasswordLink = async (req: Request, res: Response) => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ where: { email } });
+        
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const token = jwt.sign(
+            { email },
+            'your_secret_key',             
+            { expiresIn: '1h' } 
+        );
+
+        const forgotPasswordLink = `http://localhost:5173/forgot-password/${token}`;
+
+        const mailResponseDoctor = await mailSender(
+            email,
+            'Forgot Password',
+            ForgotPassword({ name: user.firstName + ' ' + user.lastName, link: forgotPasswordLink })
+        );
+
+        res.status(200).json({ success: true, message: 'Forgot password link sent successfully' });
+    } catch (error) {
+        console.error('Error sending forgot password link:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+};
+
 const forgotPassword = async (req: Request, res: Response) => {
     try {
         const { email, newPassword, confirmNewPassword } = req.body;
@@ -179,7 +212,7 @@ const forgotPassword = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         user.password = hashedPassword;
-        await user.save();
+        await user.save();        
 
         res.status(200).json({ success: true, message: 'Password updated successfully' });
     } catch (error) {
@@ -188,4 +221,4 @@ const forgotPassword = async (req: Request, res: Response) => {
     }
 };
 
-export { SignUp, login, sendOtp, verificationEmail, forgotPassword, changePassword };
+export { SignUp, login, sendOtp, verificationEmail, forgotPassword, changePassword, forgotPasswordLink };
