@@ -27,49 +27,13 @@ const PatientAppointments = () => {
 
   const TABLE_HEAD = ["Member", "Type", "Date", "Time"];
 
-  const TABLE_ROWS = [
-    {
-      img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
-      name: "Doctor Ram Lal",
-      online: true,
-      date: "23/04/18",
-      time: "09.00 AM",
-    },
-    {
-      img: "https://plus.unsplash.com/premium_photo-1661764878654-3d0fc2eefcca?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
-      name: "Doctor Bhajan Lal",
-      online: false,
-      date: "23/04/18",
-      time: "10.00 AM",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
-      name: "Doctor Lucifer",
-      online: false,
-      date: "19/09/17",
-      time: "11.00 AM",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGRvY3RvcnxlbnwwfHwwfHx8MA%3D%3D",
-      name: "Doctor Ram Mohan",
-      online: true,
-      date: "24/12/08",
-      time: "12.00 PM",
-    },
-    {
-      img: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9jdG9yfGVufDB8fDB8fHww",
-      name: "Doctor Raja Mohan",
-      online: false,
-      date: "04/10/21",
-      time: "01.00 PM",
-    },
-
-
-  ];
 
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchTerm, setSearchTerm] = useState();
   const [sortedResults, setSortedResults] = useState([]);
+
+  // console.log(appointments)
+  // console.log(sortedResults)
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -79,20 +43,19 @@ const PatientAppointments = () => {
   };
 
   useEffect(() => {
-    let filteredResults = sortedResults;
+    let filteredResults = [...appointments];
     
-    // if (searchTerm) {
-    //   filteredResults = filteredResults.filter((row) =>
-    //     row.patient.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-    //   );
-    // }
-  
+    if (searchTerm) {
+      filteredResults = filteredResults.filter((row) =>
+        row.doctor.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    // if (selectedTab === "online") {
-    //   filteredResults = filteredResults.filter((row) => row.mode);
-    // } else if (selectedTab === "offline") {
-    //   filteredResults = filteredResults.filter((row) => !row.mode);
-    // }
+    if (selectedTab === "online") {
+      filteredResults = filteredResults.filter((row) => row.mode);
+    } else if (selectedTab === "offline") {
+      filteredResults = filteredResults.filter((row) => !row.mode);
+    }
 
     setSortedResults(filteredResults);
   }, [selectedTab, searchTerm]);
@@ -110,12 +73,10 @@ const PatientAppointments = () => {
       }
     };
 
-    
     fetchAppointments();
   }, []);
 
-  console.log(appointments)
-  console.log(sortedResults)
+
 
   return (
     <div>
@@ -177,7 +138,7 @@ const PatientAppointments = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedResults.map(
+              {sortedResults && sortedResults.map(
                 ({ img, name, online, date, time, startingTime, endingTime, mode, doctor, patient }, index) => {
                   const isLast = index === sortedResults.length - 1;
                   const classes = isLast

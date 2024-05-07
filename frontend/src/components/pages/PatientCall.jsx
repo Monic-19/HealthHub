@@ -98,7 +98,7 @@ const PatientCall = () => {
   return (
     <div className='h-[100vh] w-full flex justify-center items-center relative'>
 
-      <button className='absolute lg:top-[85vh] top-[55vh] lg:left-[43vw]  rounded-md bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(-1)} disabled = {!feedbackDone}>Go Back</button>
+      <button className='absolute lg:top-[85vh] top-[55vh] lg:left-[43vw]  rounded-md bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(-1)} disabled = {feedbackDone}>Go Back</button>
 
       {
         type == "pat" ?
@@ -153,7 +153,7 @@ const PatientCall = () => {
                       onClick={submitRating}
                       className={`rounded-md w-full bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${feedback.length >  0 ?" cursor-pointer " : " cursor-not-allowed" }`}
                       disabled = {feedback.length == 0}
-                    >Submit</button>
+                    >{feedbackDone ? "Submitted" : "Submit"}</button>
                   </PopoverContent>
 
                 </Popover>
@@ -163,7 +163,7 @@ const PatientCall = () => {
           :
           (
             <div className='absolute top-0 left-0'>
-              <button className='absolute w-full lg:w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
+              <button disabled={feedbackDone} className='absolute w-full lg:w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
                 Write Patient Report
               </button>
             </div>

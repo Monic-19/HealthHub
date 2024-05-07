@@ -27,58 +27,7 @@ const DoctorAppointments = () => {
 
   const TABLE_HEAD = ["Member", "Type", "Date", "Time"];
 
-  const TABLE_ROWS = [
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "Doctor Ram Lal",
-      email: "john@creative-tim.com",
-      job: "Manager",
-      org: "Organization",
-      online: true,
-      date: "23/04/18",
-      time: "09.00 AM",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "Bhajan Lal",
-      email: "alexa@creative-tim.com",
-      job: "Programator",
-      org: "Developer",
-      online: false,
-      date: "23/04/18",
-      time: "10.00 AM",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg",
-      name: "Lucifer",
-      email: "laurent@creative-tim.com",
-      job: "Executive",
-      org: "Projects",
-      online: false,
-      date: "19/09/17",
-      time: "11.00 AM",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg",
-      name: "Ram Mohan",
-      email: "michael@creative-tim.com",
-      job: "Programator",
-      org: "Developer",
-      online: true,
-      date: "24/12/08",
-      time: "12.00 PM",
-    },
-    {
-      img: "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg",
-      name: "Raja Mohan",
-      email: "richard@creative-tim.com",
-      job: "Manager",
-      org: "Executive",
-      online: false,
-      date: "04/10/21",
-      time: "01.00 PM",
-    },
-  ];
+
 
   const [verified, setVerified] = useState(true);
   const [selectedTab, setSelectedTab] = React.useState("all");
@@ -92,21 +41,23 @@ const DoctorAppointments = () => {
     setSelectedTab(value);
   };
 
+  console.log("Appointments - ",appointments)
+  console.log("Search term - ", searchTerm)
 
   useEffect(() => {
-    let filteredResults = sortedResults;
+    let filteredResults = [...appointments];
 
-    // if (searchTerm) {
-    //   filteredResults = filteredResults.filter((row) =>
-    //     row.doctor.firstName.toLowerCase().includes(searchTerm.toLowerCase())
-    //   );
-    // }
+    if (searchTerm) {
+      filteredResults = filteredResults.filter((row) =>
+        row.patient.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    // if (selectedTab === "online") {
-    //   filteredResults = filteredResults.filter((row) => row.online);
-    // } else if (selectedTab === "offline") {
-    //   filteredResults = filteredResults.filter((row) => !row.online);
-    // }
+    if (selectedTab === "online") {
+      filteredResults = filteredResults.filter((row) => row.mode);
+    } else if (selectedTab === "offline") {
+      filteredResults = filteredResults.filter((row) => !row.mode);
+    }
 
     setSortedResults(filteredResults);
   }, [selectedTab, searchTerm]);
