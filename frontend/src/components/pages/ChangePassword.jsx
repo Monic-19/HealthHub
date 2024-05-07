@@ -6,16 +6,43 @@ import { FaHome } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
 
 
-const ForgotPassword = () => {
+const ChangePassword = () => {
     const {register, handleSubmit} = useForm();
-    const onSubmit = (data) => {
-        console.log(data)
-    }
+    
     const [email, setEmail] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
     const navigate = useNavigate();
+    
+    const onSubmit = async (data) => {
+        try {
+            const response = await fetch('http://localhost:8081/api/v1/auth/change-password', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: data.username,
+                    oldPassword: data.oldPassword,
+                    newPassword: data.newPassword,
+                    confirmNewPassword: data.confirmPassword
+                })
+            });
+            
+            if (!response.ok) {
+                console.error('Error:', response.statusText);
+            } else {
+                console.log('Password changed successfully');
+                navigate('/login');
+                toast.success('Password Changed');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+
     return (
         <div className='h-[100vh] w-full flex justify-center items-center'>
             <section>
@@ -173,4 +200,4 @@ const ForgotPassword = () => {
 
 }
 
-export default ForgotPassword
+export default ChangePassword;

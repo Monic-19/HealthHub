@@ -26,10 +26,11 @@ import VerifyEmail from './components/pages/VerifyEmail'
 import DoctorClinicInfo from './components/doctors/DoctorClinicInfo'
 import AppointmentBookingPage from './components/pages/AppointmentBookingPage'
 import { useSelector } from 'react-redux'
-import ForgotPassword from './components/pages/ForgotPassword'
+
 import PatientCall from './components/pages/PatientCall'
 import PrevReport from './components/pages/PrevReport'
 import WritePatientReport from './components/pages/WritePatientReport'
+import ChangePassword from './components/pages/ChangePassword'
 
 function App() {
   const user = useSelector((state) => state.profile.user);
@@ -42,7 +43,7 @@ function App() {
           <Route path='/' element={<Hero />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
-          <Route path='/reset' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ChangePassword />} />
           <Route path='/verifyemail' element={<VerifyEmail />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
