@@ -49,7 +49,7 @@ export const getReportsByPatientId = async (req: Request, res: Response) => {
 
 export const createPatientReport = async (req: Request, res: Response) => {
     try {
-        const { doctorId, patientId, subject, mode, summary } = req.body;
+        const { doctorId, patientId, subject, mode, summary, prescription } = req.body;
 
         const patient = await User.findByPk(patientId);
         if (!patient) {
@@ -78,9 +78,11 @@ export const createPatientReport = async (req: Request, res: Response) => {
             patientId,
             subject,
             mode,
+            prescription: prescription ? prescription : null,  
             summary: summary ? summary : null,
             prescriptionPhoto: prescriptionPhotoUrl ? prescriptionPhotoUrl : null,
         });
+
 
         res.status(201).json({ success: true, data: patientReport });
     } catch (error) {

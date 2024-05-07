@@ -39,6 +39,10 @@ PatientReport.init(
             type: DataTypes.TEXT,
             allowNull: false,
         },
+        prescription: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+        },
         prescriptionPhoto: {
             type: DataTypes.STRING,
             allowNull: true,
