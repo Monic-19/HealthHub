@@ -9,9 +9,10 @@ import { useSelector } from 'react-redux';
 const DoctorProfile = () => {
   const user = useSelector((state) => state.profile.user);
   const [doctorData, setDoctorData] = useState();
-  const [image,SetImage] = useState(user.profileImg);
+  const [image, SetImage] = useState(user.profileImg);
   const [isDataFetched, setIsDataFetched] = useState(false);
-  
+  const [updating, setUpdating] = useState(false)
+
 
   useEffect(() => {
     async function fetchData() {
@@ -39,13 +40,15 @@ const DoctorProfile = () => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
-  
+
+    setUpdating(true);
     axios.post(`http://localhost:8081/api/v1/personal-info/profile-pic/${user.id}`, formData)
       .then(response => {
         console.log(response);
         if (response.status === 200) {
           SetImage(response?.data?.user?.profileImg);
           localStorage.setItem('user', JSON.stringify(response?.data?.user));
+          setUpdating(false);
         } else {
           throw new Error('Network response was not ok');
         }
@@ -54,7 +57,7 @@ const DoctorProfile = () => {
         console.error('There was a problem with the fetch operation:', error);
       });
   };
-  
+
 
   return (
     <div className='lg:h-full h-[57vh]  w-[100%] relative'>
@@ -63,7 +66,7 @@ const DoctorProfile = () => {
         <div>
 
           <div className='p-5 relative'>
-          {!isDataFetched ? <Alert icon = {<Icon/>} color='amber' className='absolute z-10 top-[3] left-[1] lg:w-[25vw] w-[80vw] '>Please Fill Your Information</Alert> : ""}
+            {!isDataFetched ? <Alert icon={<Icon />} color='amber' className='absolute z-10 top-[3] left-[1] lg:w-[25vw] w-[80vw] '>Please Fill Your Information</Alert> : ""}
 
             <motion.div
               initial={{ opacity: 0, scale: 0 }}
@@ -71,13 +74,17 @@ const DoctorProfile = () => {
               transition={{ duration: .5 }}
               className=' lg:w-[35vw] w-[90%] rounded-lg shadow-xl lg:h-[18vh] h-[22vh] flex justify-center items-center lg:gap-[4vw] gap-[10vw] p-4 bg-gray-200 cursor-pointer absolute top-[5vh] left-[2vh] font-mono'>
               <label htmlFor="avatarInput" style={{ cursor: 'pointer' }}>
-                <Avatar src={image != undefined ? image : (user?.gender === 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg')} alt="avatar" size="xxl" withBorder={true} className="p-0.5" />
+
+                <Avatar src={image != undefined ? image : (user?.gender === 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg')} alt="avatar" size="xxl" withBorder={true}
+                  className={`p-0.5 ${updating} ? "cursor-wait" : "cursor-pointer"`} />
+
                 <input
                   type="file"
                   id="avatarInput"
                   style={{ display: 'none' }}
                   accept="image/*"
                   onChange={handleFileChange}
+                  disabled={updating}
                 />
               </label>
               <div className='h-full text-lg '>
