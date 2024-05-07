@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaSearch } from "react-icons/fa";
 import { Card, CardHeader, Input, Typography, Button, CardBody, Chip, CardFooter, Tabs, TabsHeader, Tab, Avatar, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 const DoctorAppointments = () => {
   const navigate = useNavigate();
+  const user  = useSelector((state) => state.profile.user);
+  const [appointments,setAppointments] = useState([]);
   const TABS = [
     {
       label: "All",
@@ -89,23 +93,40 @@ const DoctorAppointments = () => {
   };
 
 
-  React.useEffect(() => {
-    let filteredResults = TABLE_ROWS;
+  useEffect(() => {
+    let filteredResults = sortedResults;
 
-    if (searchTerm) {
-      filteredResults = filteredResults.filter((row) =>
-        row.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
+    // if (searchTerm) {
+    //   filteredResults = filteredResults.filter((row) =>
+    //     row.doctor.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+    //   );
+    // }
 
-    if (selectedTab === "online") {
-      filteredResults = filteredResults.filter((row) => row.online);
-    } else if (selectedTab === "offline") {
-      filteredResults = filteredResults.filter((row) => !row.online);
-    }
+    // if (selectedTab === "online") {
+    //   filteredResults = filteredResults.filter((row) => row.online);
+    // } else if (selectedTab === "offline") {
+    //   filteredResults = filteredResults.filter((row) => !row.online);
+    // }
 
     setSortedResults(filteredResults);
   }, [selectedTab, searchTerm]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        if(user){
+          const response = await axios.get(`http://localhost:8081/api/v1/appointment/doctor/${user.id}`);
+          setAppointments(response.data.appointments);
+          setSortedResults(response.data.appointments);
+        }
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    
+    fetchAppointments();
+  }, []);
 
   return (
 
@@ -167,8 +188,8 @@ const DoctorAppointments = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedResults.map(
-                    ({ img, name, email, time, online, date }, index) => {
+                  {sortedResults && sortedResults.map(
+                    ({ img, name, startingTime,endingTime,mode, date, doctor, patient }, index) => {
                       const isLast = index === sortedResults.length - 1;
                       const classes = isLast
                         ? "p-4"
@@ -179,24 +200,24 @@ const DoctorAppointments = () => {
                           initial={{ y: -50, opacity: 0 }}
                           animate={{ y: 0, opacity: 1 }}
                           transition={{ duration: 0.5 }}
-                          key={name}>
+                          key={index}>
                           <td className={classes}>
                             <div className="flex items-center gap-3">
-                              <Avatar src={img} alt={name} size="sm" />
+                              <Avatar src={patient && patient.profileImg ? patient.profileImg : patient.gender != 'Male' ? 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg': 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png'} alt={patient.firstName} size="sm" />
                               <div className="flex flex-col">
                                 <Typography
                                   variant="small"
                                   color="blue-gray"
                                   className="font-normal"
                                 >
-                                  {name}
+                                  {patient && patient.firstName}
                                 </Typography>
                                 <Typography
                                   variant="small"
                                   color="blue-gray"
                                   className="font-normal opacity-70"
                                 >
-                                  {email}
+                                  {patient && patient.email}
                                 </Typography>
                               </div>
                             </div>
@@ -207,8 +228,8 @@ const DoctorAppointments = () => {
                               <Chip
                                 variant="ghost"
                                 size="sm"
-                                value={online ? "online" : "offline"}
-                                color={online ? "green" : "blue-gray"}
+                                value={mode ? "online" : "offline"}
+                                color={mode ? "green" : "blue-gray"}
                               />
                             </div>
                           </td>
@@ -228,9 +249,9 @@ const DoctorAppointments = () => {
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {time}
-                              {online ?
-                                <button onClick={() => navigate(`/call/${name.split(' ').join("")}/monic/doc`)}>
+                              {startingTime + ' to ' + endingTime}
+                              {mode ?
+                                <button onClick={() => navigate(`/call/${doctor.firstName}-${doctor.id}/${patient.firstName}-${patient.id}/doc`)}>
                                   <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
                                 </button>
                                 :

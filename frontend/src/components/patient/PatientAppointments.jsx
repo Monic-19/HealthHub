@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaSearch } from "react-icons/fa";
 import { Card, CardHeader, Input, Typography, CardBody, Chip, Button, CardFooter, Tabs, TabsHeader, Tab, Avatar, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const PatientAppointments = () => {
   const navigate = useNavigate();
+  const [appointments,setAppointments] = useState([]);
+  const user = useSelector((state) => state.profile.user);
   const TABS = [
     {
       label: "All",
@@ -63,9 +67,9 @@ const PatientAppointments = () => {
 
   ];
 
-  const [selectedTab, setSelectedTab] = React.useState("all");
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [sortedResults, setSortedResults] = React.useState([]);
+  const [selectedTab, setSelectedTab] = useState("all");
+  const [searchTerm, setSearchTerm] = useState();
+  const [sortedResults, setSortedResults] = useState([]);
 
   const handleChange = (e) => {
     setSearchTerm(e.target.value);
@@ -74,23 +78,41 @@ const PatientAppointments = () => {
     setSelectedTab(value);
   };
 
-  React.useEffect(() => {
-    let filteredResults = TABLE_ROWS;
+  useEffect(() => {
+    let filteredResults = sortedResults;
+    
+    // if (searchTerm) {
+    //   filteredResults = filteredResults.filter((row) =>
+    //     row.patient.firstName.toLowerCase().includes(searchTerm.toLowerCase())
+    //   );
+    // }
+  
 
-    if (searchTerm) {
-      filteredResults = filteredResults.filter((row) =>
-        row.name.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    if (selectedTab === "online") {
-      filteredResults = filteredResults.filter((row) => row.online);
-    } else if (selectedTab === "offline") {
-      filteredResults = filteredResults.filter((row) => !row.online);
-    }
+    // if (selectedTab === "online") {
+    //   filteredResults = filteredResults.filter((row) => row.mode);
+    // } else if (selectedTab === "offline") {
+    //   filteredResults = filteredResults.filter((row) => !row.mode);
+    // }
 
     setSortedResults(filteredResults);
   }, [selectedTab, searchTerm]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        if(user){
+          const response = await axios.get(`http://localhost:8081/api/v1/appointment/patient/13`);
+          setAppointments(response.data.appointments);
+          setSortedResults(response.data.appointments);
+        }
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    
+    fetchAppointments();
+  }, []);
 
   return (
     <div>
@@ -153,7 +175,7 @@ const PatientAppointments = () => {
             </thead>
             <tbody>
               {sortedResults.map(
-                ({ img, name, online, date, time }, index) => {
+                ({ img, name, online, date, time, startingTime, endingTime, mode, doctor, patient }, index) => {
                   const isLast = index === sortedResults.length - 1;
                   const classes = isLast
                     ? "p-4"
@@ -164,17 +186,17 @@ const PatientAppointments = () => {
                       initial={{ y: -50, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
                       transition={{ duration: 0.5 }}
-                      key={name}>
+                      key={index}>
                       <td className={classes}>
                         <div className="flex items-center gap-3">
-                          <Avatar src={img} alt={name} size="sm" />
+                          <Avatar src={doctor && doctor.profileImg ? doctor.profileImg : doctor.gender != 'Male' ? 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg': 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png'} alt={name} size="sm" />
                           <div className="flex flex-col">
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-normal"
                             >
-                              {name}
+                              {doctor.firstName}
                             </Typography>
 
                           </div>
@@ -186,8 +208,8 @@ const PatientAppointments = () => {
                           <Chip
                             variant="ghost"
                             size="sm"
-                            value={online ? "online" : "offline"}
-                            color={online ? "green" : "blue-gray"}
+                            value={mode ? "online" : "offline"}
+                            color={mode ? "green" : "blue-gray"}
                           />
                         </div>
                       </td>
@@ -207,9 +229,9 @@ const PatientAppointments = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {time} &nbsp;
-                          {online ?
-                            <button onClick={() => navigate(`/call/${name.split(' ').join("")}/monic/pat`)}>
+                          {startingTime + ' to ' + endingTime} &nbsp;
+                          {mode ?
+                            <button onClick={() => navigate(`/call/${doctor.firstName}-${doctor.id}/${patient.firstName}-${patient.id}/pat`)}>
                               <span className='text-blue-600 hover:text-blue-800 ml-4'>{"join video link"}</span>
                             </button>
                             : ""}

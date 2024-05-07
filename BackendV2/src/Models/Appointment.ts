@@ -73,7 +73,7 @@ Appointment.init(
   }
 );
 
-Appointment.belongsTo(User, {foreignKey: 'patientId' });
-Appointment.belongsTo(User, {foreignKey: 'doctorId' });
+Appointment.belongsTo(User, { foreignKey: 'patientId', as: 'patient' });
+Appointment.belongsTo(User, { foreignKey: 'doctorId', as: 'doctor' });
 
 export default Appointment;

@@ -30,14 +30,14 @@ const createAppointment = async (req: Request, res: Response) => {
         await appointment.update({ token }, { where: { id: appointment.id } });
 
         if (mode && videoLink !== null) {
-            videoLink = `http://localhost:5174/call/${doctor.firstName}-${doctor.id}/${patient.firstName}-${patient.id}`
+            videoLink = `http://localhost:5174/call/${doctor?.firstName}-${doctor?.id}/${patient?.firstName}-${patient?.id}`
             await appointment.update({ videoLink }, { where: { id: appointment.id } });
         }
 
         const mailResponsePatient = await mailSender(
             patient.email, 
             'Appointment Confirmation',
-            appointmentConfirmation({PatientName: patient.firstName + ' ' + patient.lastName, DoctorName: doctor.firstName + ' ' + doctor.lastName, videoLink: videoLink + '/pat', Date: String(appointment.date), startingTime, endingTime, phoneNo: String(doctor.phoneNo)})
+            appointmentConfirmation({PatientName: patient?.firstName + ' ' + patient?.lastName, DoctorName: doctor?.firstName + ' ' + doctor?.lastName, videoLink: videoLink + '/pat', Date: String(appointment.date), startingTime, endingTime, phoneNo: String(doctor?.phoneNo)})
         );
 
         const mailResponseDoctor = await mailSender(
@@ -74,17 +74,15 @@ const cancelAppointment = async (req: Request, res: Response) => {
     }
 };
 
-const getAppointment = async (req: Request, res: Response) => {
+const getAppointmentByPatientId = async (req: Request, res: Response) => {
     try {
-        const { userId, isDoctor } = req.params;
-        let appointments;
-
-        if (isDoctor) {
-            appointments = await Appointment.findAll({ where: { doctorId: userId } });
-        } else {
-            appointments = await Appointment.findAll({ where: { patientId: userId } });
-        }
-
+        const { patientId } = req.params;
+        const appointments = await Appointment.findAll({
+            where: { patientId: patientId },
+            include: [
+                { model: User, as: 'doctor' },
+                { model: User, as: 'patient' }            ]
+        });
         res.status(200).json({
             appointments,
         });
@@ -95,4 +93,23 @@ const getAppointment = async (req: Request, res: Response) => {
     }
 };
 
-export { getAppointment, createAppointment, cancelAppointment};
+const getAppointmentByDoctorId = async (req: Request, res: Response) => {
+    try {
+        const { doctorId } = req.params;
+        const appointments = await Appointment.findAll({
+            where: { doctorId: doctorId },
+            include: [
+                { model: User, as: 'doctor' },
+                { model: User, as: 'patient' }            ]
+        });
+        res.status(200).json({
+            appointments,
+        });
+
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export { getAppointmentByDoctorId, getAppointmentByPatientId, createAppointment, cancelAppointment};
