@@ -17,6 +17,8 @@ import { createAppointment } from "../../services/Operations/apppointmentAPI";
 const AppointmentBookingPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const loading = useSelector((state) => state.appointment.loading );
+    console.log(loading)
 
     const offlineoptions= [
         {
@@ -183,9 +185,11 @@ const AppointmentBookingPage = () => {
                          </ul>
                       
                              <button
-                                className="w-full bg-black text-white py-2 rounded-lg"
+                                className= {`w-full bg-black text-white py-2 rounded-lg ${!loading ? "cursor-pointer" : "cursor-wait"}`}
                                 onClick={() => handleAppointmentBooking(true)}
+                                disabled = {loading}
                              >
+                                
                                  Book Now
                              </button>
                 
@@ -256,7 +260,8 @@ const AppointmentBookingPage = () => {
                      </ul>
                   
                      <button
-                     className="w-full bg-black text-white py-2 rounded-lg"
+                     className={`w-full bg-black text-white py-2 rounded-lg ${!loading ? "cursor-pointer" : "cursor-wait"}`}
+                     disabled = {loading}
                      onClick={() => handleAppointmentBooking(false)}
                     >
                      Book Now

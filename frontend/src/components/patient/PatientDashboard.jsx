@@ -7,7 +7,7 @@ const PatientDashboard = () => {
     return (
         <>
             <Navbar />
-            <div className=' bg-blue-gray-100 h-[100vh] w-full p-5 '>
+            <div className=' bg-blue-gray-100 min-h-[100vh] w-full p-5 '>
 
 
                 <div >
@@ -34,7 +34,7 @@ const PatientDashboard = () => {
                     </Tabs>
                 </div>
 
-                <div className='h-[70vh] lg:w-[80vw] w-full  ml-[0vw] lg:ml-[10vw] mt-[5vh] patient-outlet  rounded-xl'>
+                <div className='min-h-[70vh] lg:w-[80vw] w-full  ml-[0vw] lg:ml-[10vw] mt-[5vh] patient-outlet  rounded-xl'>
                     <Outlet></Outlet>
                 </div>
 

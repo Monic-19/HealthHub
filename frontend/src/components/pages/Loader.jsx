@@ -4,41 +4,41 @@ import { useRef } from 'react'
 
 const Loader = (props) => {
     const ref = useRef(null);
-    console.log(props)
+    // console.log(props)
 
     useEffect(() => {
         const tl = gsap.timeline({ repeat: -1 })
         if (window.innerWidth < 768) {
             tl.from(".logo", {
                 letterSpacing: "0vh",
-                duration: 1,
+                duration: 0.75,
                 ease: "power4.out",
             })
                 .to(".logo", {
                     letterSpacing: "-7.5vh",
-                    duration: 2,
+                    duration: 1,
                     ease: "power4.in",
                 })
                 .to(".logo", {
                     letterSpacing: "0vh",
-                    duration: 1,
+                    duration: 0.75,
                     ease: "power4.out",
                 });
         }
         else {
             tl.from(".logo", {
                 letterSpacing: "0vh",
-                duration: 1,
+                duration: 0.75,
                 ease: "power4.out",
             })
                 .to(".logo", {
                     letterSpacing: "-10vh",
-                    duration: 2,
+                    duration: 1,
                     ease: "power4.in",
                 })
                 .to(".logo", {
                     letterSpacing: "0vh",
-                    duration: 1,
+                    duration: 0.75,
                     ease: "power4.out",
                 });
         }
