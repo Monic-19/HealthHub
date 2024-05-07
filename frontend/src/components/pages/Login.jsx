@@ -65,11 +65,14 @@ const Login = () => {
                                             {' '}
                                             Password{' '}
                                         </label>
-                                        <a href="#" title="" className="text-sm font-semibold text-black hover:underline">
+                                        <h1 className="text-sm font-semibold text-black hover:underline -mt-1">
                                             {' '}
-                                            <Link to={"/reset"}>Forgot password?</Link>
+                                            <Link to={"/forgot"}>Forgot password?</Link>
+                                        </h1>
+                                        <h1 className="text-sm  text-black hover:underline -mt-1">
                                             {' '}
-                                        </a>
+                                            <Link to={"/reset"}>Change password!</Link>
+                                        </h1>
                                     </motion.div>
 
                                     <motion.div initial={initialMotion} animate={finalMotion} transition={{duration : 0.8}} className="mt-2">

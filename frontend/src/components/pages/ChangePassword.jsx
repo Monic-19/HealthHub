@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form';
 
 const ChangePassword = () => {
     const {register, handleSubmit} = useForm();
-    
     const [email, setEmail] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -42,7 +41,6 @@ const ChangePassword = () => {
         }
     }
 
-
     return (
         <div className='h-[100vh] w-full flex justify-center items-center'>
             <section>
@@ -53,7 +51,6 @@ const ChangePassword = () => {
                             <h1 className="italic text-center text-3xl font-bold mb-2 text-black">Welcome to Health Hub</h1>
                         </div>
                         <h2 className="text-center text-2xl leading-tight text-black">
-                            Reset Your Password
                         </h2>
                         <p className="mt-2 text-center text-sm text-gray-600 ">
                             Don&apos;t have an account?{' '}
