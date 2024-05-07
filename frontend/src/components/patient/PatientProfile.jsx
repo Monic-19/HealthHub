@@ -13,7 +13,7 @@ const PatientProfile = () => {
   const [name, SetName] = useState(`${user.firstName} ${user.lastName}`);
 
   const [image, SetImage] = useState(user?.profileImg);
-  // console.log(user);
+  // console.log(user)
 
   const cardHeaderStyle = {
     backgroundImage: `url(${image})`,
