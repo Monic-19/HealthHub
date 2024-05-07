@@ -78,9 +78,8 @@ export const createPatientReport = async (req: Request, res: Response) => {
             patientId,
             subject,
             mode,
-            summary,
-            prescriptionWritten: summary ? summary : null,
-            prescriptionPhoto: prescriptionPhotoUrl,
+            summary: summary ? summary : null,
+            prescriptionPhoto: prescriptionPhotoUrl ? prescriptionPhotoUrl : null,
         });
 
         res.status(201).json({ success: true, data: patientReport });
@@ -95,7 +94,7 @@ export const createPatientReport = async (req: Request, res: Response) => {
 export const updatePatientReport = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { doctorId, patientId, subject, mode, summary, prescriptionWritten, prescriptionPhoto } = req.body;
+        const { doctorId, patientId, subject, mode, summary, prescriptionPhoto } = req.body;
 
         const existingReport = await PatientReport.findByPk(id);
         if (!existingReport) {
@@ -109,7 +108,6 @@ export const updatePatientReport = async (req: Request, res: Response) => {
                 subject,
                 mode,
                 summary,
-                prescriptionWritten,
                 prescriptionPhoto,
             },
             {

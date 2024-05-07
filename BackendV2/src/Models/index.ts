@@ -36,7 +36,7 @@ db.Review = Review;
 db.PatientReport = PatientReport;
 
 export async function  sync_models() {
-  db.sequelize.sync({ force: true, alter: true }).then(() => {
+  db.sequelize.sync({ force: false, alter: false }).then(() => {
 	console.log(`Database Synced...`)
   })
 }
