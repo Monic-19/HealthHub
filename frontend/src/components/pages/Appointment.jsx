@@ -22,6 +22,8 @@ const Appointment = () => {
   const [date, setDate] = useState(getTodayDate());
   const [startingTime, setStartingTime] = useState('');
   const [endingTime, setEndingTime] = useState('');
+  const [appointments,setAppointments] = useState();
+  
 
   function getTodayDate() {
     const today = new Date();
@@ -32,6 +34,16 @@ const Appointment = () => {
   }
 
   const doctorCategories = Array.from(new Set(doctors.map(d => d.specialization)));
+
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8081/api/v1/appointment/${date}/${startingTime}`); 
+      setAppointments(response.data.appointments);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  };
+  
 
   useEffect(() => {
     let filtered = doctors.filter(doctor => {
@@ -59,13 +71,32 @@ const Appointment = () => {
       filtered = filtered.filter(doctor => Ids.includes(doctor.clinic.addressId));
     }
 
+
     setFilteredDoctors(filtered);
   },[category,state,city,doctorName]);
+
+
 
   useEffect(() => {
     if(startingTime != '' && endingTime != '' && date != ''){
       dispatch(setAppointmentTimeing({date,startingTime,endingTime}));
     }
+
+    fetchAppointments();
+    
+    let filter = filteredDoctors;
+    if(appointments){
+      const filterDoctors = filteredDoctors;
+
+      if (appointments) {
+        const doctorsWithoutAppointments = filterDoctors.filter(doctor => {
+          return !appointments.some(appointment => appointment.doctorId === doctor.userId);
+        });
+
+        setFilteredDoctors(doctorsWithoutAppointments);
+      }
+    }
+    
   },[date,startingTime,endingTime]);
 
 

@@ -18,10 +18,10 @@ const DoctorProfile = () => {
       try {
         const response = await axios.get(`http://localhost:8081/api/v1/personal-info/doctor/${user.id}`);
         setDoctorData(response.data);
-        isDataFetched(true);
+        setIsDataFetched(true);
       } catch (error) {
         console.error('Error fetching data:', error);
-        isDataFetched(false);
+        setIsDataFetched(false);
       }
     }
 

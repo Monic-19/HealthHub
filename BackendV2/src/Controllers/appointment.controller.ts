@@ -112,4 +112,21 @@ const getAppointmentByDoctorId = async (req: Request, res: Response) => {
     }
 };
 
-export { getAppointmentByDoctorId, getAppointmentByPatientId, createAppointment, cancelAppointment};
+const getAppointmentByDateTime = async (req: Request, res: Response) => {
+    try {
+        const { date, startingTime } = req.params;
+
+        if (!date || !startingTime) {
+            return res.status(400).json({ error: "Date and starting time are required" });
+        }
+
+        const appointments = await Appointment.findAll({ where: { date: date, startingTime: startingTime } });
+
+        return res.status(200).json({ appointments });
+    } catch (error) {
+        console.error('Error fetching appointments by date and time:', error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export { getAppointmentByDoctorId, getAppointmentByPatientId, createAppointment, cancelAppointment, getAppointmentByDateTime };

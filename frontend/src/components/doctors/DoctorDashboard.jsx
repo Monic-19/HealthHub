@@ -9,17 +9,49 @@ import { FaPeopleGroup } from "react-icons/fa6";
 import { FaUserDoctor } from "react-icons/fa6";
 import { Button } from "@material-tailwind/react";
 import { motion } from "framer-motion";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../../services/Operations/authAPI'
+import axios from 'axios'
 
 const DoctorDashboard = () => {
+  const user = useSelector((state) => state.profile.user);
+  const [onlineCnt,setOnlineCnt] = useState(0);
+  const [offlineCnt,setOfflineCnt] = useState(0);
   const [dateTime, setDateTime] = useState(new Date());
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   useEffect(() => {
     const interval = setInterval(() => {
       setDateTime(new Date());
     }, 1000);
+
+    const fetchAppointments = async () => {
+      try {
+        if(user){
+          const response = await axios.get(`http://localhost:8081/api/v1/appointment/doctor/${user.id}`);
+          let appointments = response.data.appointments;
+          
+          let onlineAppointments = 0;
+          let offlineAppointments = 0;
+    
+          for (const appointment of appointments) {
+            if (appointment.mode) {
+              onlineAppointments++;
+            } else {
+              offlineAppointments++;
+            }
+          }
+    
+          setOfflineCnt(offlineAppointments);
+          setOnlineCnt(onlineAppointments);
+        }
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    fetchAppointments();
     
     return () => clearInterval(interval);
   }, []);
@@ -93,7 +125,7 @@ const DoctorDashboard = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.9 }}
                   className="bg-white rounded-lg h-[7vh] w-[90%] mt-7 ml-5 shadow-lg flex justify-center items-center text-xl font-mono font-bold">
-                  <h2>Offline Appointments - 15</h2>
+                  <h2>Offline Appointments - {offlineCnt}</h2>
                 </motion.div>
 
                 <motion.div
@@ -101,7 +133,7 @@ const DoctorDashboard = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1.2 }}
                   className="bg-white rounded-lg h-[7vh] w-[90%] mt-7 ml-5 shadow-lg flex justify-center items-center text-xl font-mono font-bold">
-                  <h2>Online Appointments - 15</h2>
+                  <h2>Online Appointments - {onlineCnt}</h2>
                 </motion.div>
 
                 <motion.div
