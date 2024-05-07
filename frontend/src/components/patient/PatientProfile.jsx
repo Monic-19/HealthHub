@@ -13,7 +13,15 @@ const PatientProfile = () => {
   const [name, SetName] = useState(`${user.firstName} ${user.lastName}`);
 
   const [image, SetImage] = useState(user?.profileImg);
-  console.log(user);
+  // console.log(user);
+
+  const cardHeaderStyle = {
+    backgroundImage: `url(${image})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
+  const [updating, setUpdating] = useState(false)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,26 +37,32 @@ const PatientProfile = () => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
-  
+
+
+
+    setUpdating(true);
     axios.post(`http://localhost:8081/api/v1/personal-info/profile-pic/${user.id}`, formData)
       .then(response => {
-        console.log(response);
+        // console.log(response);
         if (response.status === 200) {
           SetImage(response?.data?.user?.profileImg);
           localStorage.setItem('user', JSON.stringify(response?.data?.user));
+          setUpdating(false);
         } else {
           throw new Error('Network response was not ok');
         }
       })
       .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
+        setUpdating(false);
       });
+
   };
-  
 
 
   return (
-    <div className='profile flex lg:flex-row flex-col-reverse overflow-y-scroll lg:gap-0 gap-8 pb-4'>
+    <div className={`profile flex lg:flex-row flex-col-reverse overflow-y-scroll lg:gap-0 gap-8 pb-4`}>
+
 
       <motion.div
         initial={{ scale: 0, height: 0 }}
@@ -79,6 +93,7 @@ const PatientProfile = () => {
                   src={user?.gender == 'Male' ? 'https://i.ibb.co/74cXTYF/Male-Profile-Icon.png' : 'https://i.ibb.co/FXGmr2K/Female-Profile-Icon.jpg'}
                   alt="Profile Preview"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  className={updating ? "cursor-wait" : "cursor-pointer"}
                 />
               ) : (
                 <div style={{ color: '#666' }}>Click to upload profile image</div>
@@ -91,6 +106,7 @@ const PatientProfile = () => {
               style={{ display: 'none' }}
               accept="image/*"
               onChange={handleFileChange}
+              disabled={updating}
             />
           </div>
 
@@ -98,16 +114,16 @@ const PatientProfile = () => {
             <h4 className='my-[2vh]'>Previous Reports</h4>
             <Card className="w-[70%] ml-auto mr-auto ">
               <List className='text-sm'>
-                <ListItem selected={selected === 1} onClick={() => {setSelectedItem(1); navigate(`/report/${selected}`);}}>
+                <ListItem selected={selected === 1} onClick={() => { setSelectedItem(1); navigate(`/report/${selected}`); }}>
                   Document 1
                 </ListItem>
-                <ListItem selected={selected === 2} onClick={() => {setSelectedItem(2); navigate(`/report/${selected}`);}}>
+                <ListItem selected={selected === 2} onClick={() => { setSelectedItem(2); navigate(`/report/${selected}`); }}>
                   Document 2
                 </ListItem>
-                <ListItem selected={selected === 3} onClick={() => {setSelectedItem(3); navigate(`/report/${selected}`);}}>
+                <ListItem selected={selected === 3} onClick={() => { setSelectedItem(3); navigate(`/report/${selected}`); }}>
                   Document 3
                 </ListItem>
-                <ListItem selected={selected === 3} onClick={() => {setSelectedItem(4); navigate(`/report/${selected}`);}}>
+                <ListItem selected={selected === 3} onClick={() => { setSelectedItem(4); navigate(`/report/${selected}`); }}>
                   Document 4
                 </ListItem>
               </List>
@@ -131,7 +147,8 @@ const PatientProfile = () => {
             floated={false}
             shadow={false}
             color="transparent"
-            className="absolute inset-0 m-0 h-full w-full rounded-none bg-[url(https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671142.jpg?size=626&ext=jpg&ga=GA1.1.1818581771.1714327882&semt=sph)] bg-cover bg-center"
+            className={`absolute inset-0 m-0 h-full w-full rounded-none`}
+            style={cardHeaderStyle}
           >
             <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-t from-black/80 via-black/50" />
           </CardHeader>
