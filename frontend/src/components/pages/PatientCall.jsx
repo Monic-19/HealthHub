@@ -4,7 +4,7 @@ import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt'
 import Rating from '@mui/material/Rating';
 import Box from '@mui/material/Box';
 import StarIcon from '@mui/icons-material/Star';
-import { Textarea } from "@material-tailwind/react";
+import { Textarea, Popover, PopoverHandler, PopoverContent, Button } from "@material-tailwind/react";
 import axios from 'axios';
 
 const labels = {
@@ -34,9 +34,10 @@ const PatientCall = () => {
   const [value, setValue] = React.useState(2.5);
   const [hover, setHover] = React.useState(-1);
 
-  const [feedback , setFeedback] = React.useState("");
+  const [feedback, setFeedback] = React.useState("");
+  const [feedbackDone, setFeedbackDone] = React.useState(false)
 
-  function submitRating(){
+  function submitRating() {
     console.log(value);
     console.log(feedback);
 
@@ -46,22 +47,23 @@ const PatientCall = () => {
       rating: value,
       comment: feedback
     })
-    .then(response => {
+      .then(response => {
         console.log('Review submitted successfully:', response.data);
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error('Error submitting review:', error);
-    });
+      });
 
     setFeedback("");
   }
 
   const myMeeting = async (element) => {
-    const roomID = patientname + doctorname;
+    const roomID = patientname.split('-')[0] + doctorname.split('-')[0];
     const userID = Math.floor(Math.random() * 10000) + "";
-    const userName = type == "doc" ? doctorname : patientname;
+    const userName = type == "doc" ? doctorname.split('-')[0] : patientname.split('-')[0];
     const appID = 1384980360;
     const serverSecret = "1fe840ebf181de4225d47356adb2fe84";
+    console.log(roomID)
 
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
@@ -79,7 +81,7 @@ const PatientCall = () => {
         sharedLinks: [
           {
             name: "Copy Link",
-            url: `http://localhost:5173/call/${doctorname}/${patientname}/pat`,
+            url: `http://localhost:5173/call/${doctorname}/${patientname}`,
           },
 
         ],
@@ -96,58 +98,72 @@ const PatientCall = () => {
   return (
     <div className='h-[100vh] w-full flex justify-center items-center relative'>
 
-      <button className='absolute lg:top-[85vh] top-[55vh] lg:left-[43vw]  rounded-md bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(-1)}>Go Back</button>
+      <button className='absolute lg:top-[85vh] top-[55vh] lg:left-[43vw]  rounded-md bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(-1)} disabled = {!feedbackDone}>Go Back</button>
 
       {
         type == "pat" ?
           (
             <div className='absolute top-0 left-[40vw]'>
-              <div className='absolute top-[67.5vh] -left-[23vw] bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
-                <Box
-                  sx={{
-                    width: 250,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: "1.5vw"
-                  }}
-                >
-                  <Rating
-                    name="hover-feedback"
-                    value={value}
-                    precision={0.5}
-                    getLabelText={getLabelText}
+              <div className='absolute top-[65vh] left-0 w-[20vw]'>
+                <Popover>
+                  <PopoverHandler>
+                    <button className='rounded-md w-full bg-[#0055FE] py-2 text-md font-semibold  text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black '>Click here to Rate Your Doctor</button>
+                  </PopoverHandler>
 
-                    onChange={(event, newValue) => {
-                      setValue(newValue);
-                    }}
+                  <PopoverContent>
+                    <div className=' bg-[#0055FE] justify-center items-center font-mono py-2 px-4 rounded-md'>
+                      <Box
+                        sx={{
+                          width: 250,
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: "1.5vw"
+                        }}
+                      >
+                        <Rating
+                          name="hover-feedback"
+                          value={value}
+                          precision={0.5}
+                          getLabelText={getLabelText}
 
-                    onChangeActive={(event, newHover) => {
-                      setHover(newHover);
-                    }}
+                          onChange={(event, newValue) => {
+                            setValue(newValue);
+                          }}
 
-                    emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="medium" />}
-                    icon={<StarIcon style={{ opacity: 1 }} fontSize="medium" />}
-                  />
+                          onChangeActive={(event, newHover) => {
+                            setHover(newHover);
+                          }}
 
-                  {value !== null && (
-                    <Box sx={{ ml: 2, color: "white", fontSize: "2vh" }}>{labels[hover !== -1 ? hover : value]}</Box>
-                  )}
-                </Box>
+                          emptyIcon={<StarIcon style={{ opacity: 0.55 }} fontSize="medium" />}
+                          icon={<StarIcon style={{ opacity: 1 }} fontSize="medium" />}
+                        />
+
+                        {value !== null && (
+                          <Box sx={{ ml: 2, color: "white", fontSize: "2vh" }}>{labels[hover !== -1 ? hover : value]}</Box>
+                        )}
+                      </Box>
+                    </div>
+
+                    <div className="my-5 flex w-72 flex-col gap-6">
+                      <Textarea color='blue' label="please give your doctor a feedback" value={feedback} onChange={(e) => setFeedback(e.target.value)} />
+
+                    </div>
+
+                    <button
+                      onClick={submitRating}
+                      className={`rounded-md w-full bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${feedback.length >  0 ?" cursor-pointer " : " cursor-not-allowed" }`}
+                      disabled = {feedback.length == 0}
+                    >Submit</button>
+                  </PopoverContent>
+
+                </Popover>
               </div>
-
-              <div className="absolute top-[65vh] flex w-72 flex-col gap-6">
-                <Textarea color='blue' label="please give your doctor a feedback" onChange={(e) => {setFeedback(e.target.value)}}/>
-              </div>
-
-              <button className='absolute w-[20vw] lg:top-[67.5vh] top-[55vh] left-[23vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={submitRating}>
-              Submit feedback
-            </button>
             </div>
           )
           :
           (
             <div className='absolute top-0 left-0'>
-              <button className='absolute w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
+              <button className='absolute w-full lg:w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
                 Write Patient Report
               </button>
             </div>

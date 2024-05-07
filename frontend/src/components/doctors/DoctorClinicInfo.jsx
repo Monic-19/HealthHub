@@ -1,5 +1,5 @@
-import React, { useState , useEffect } from "react";
-import { Card, Typography, Input, Checkbox, Button, useSelect, } from "@material-tailwind/react";
+import React, { useState, useEffect } from "react";
+import { Alert, Card, Typography, Input, Checkbox, Button, useSelect, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,47 +7,50 @@ import { saveClinicInformation } from "../../services/Operations/personal_Inform
 import axios from "axios";
 
 
+
 const DoctorClinicInfo = () => {
-    const { register, handleSubmit, formState: { errors } , setValue} = useForm();
-    const dispatch = useDispatch();
-    const user = useSelector((state) => state.profile.user);
-    const [clinicData,setClinicData] = useState();
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.profile.user);
+  const [clinicData, setClinicData] = useState();
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
-    const onClickSubmit = (data) => {
-      // console.log(data);
-      dispatch(saveClinicInformation(user.id,data));
-    }
+  const onClickSubmit = (data) => {
+    // console.log(data);
+    dispatch(saveClinicInformation(user.id, data));
+  }
 
-    useEffect(() => {
-      async function fetchData() {
-          try {
-              const response = await axios.get(`http://localhost:8081/api/v1/personal-info/clinic/${user.id}`);
-              setClinicData(response.data);
-          } catch (error) {
-              console.error('Error fetching data:', error);
-          }
-      }
-  
-      fetchData();
-  }, [user.id]); 
-  
   useEffect(() => {
-      if (clinicData) {
-          setValue("name", clinicData?.clinics?.name);
-          setValue("pincode", clinicData?.address?.pincode);
-          setValue("building", clinicData?.address?.building);
-          setValue("area", clinicData?.address?.area);
-          setValue("landmark", clinicData?.address?.landmark);
-          setValue("townCity", clinicData?.address?.townCity);
-          setValue("state", clinicData?.address?.state);
-          setValue("fee", clinicData?.clinics?.fee);
-          setValue("openingTime", clinicData?.clinics?.openingTime);
-          setValue("closingTime", clinicData?.clinics?.closingTime);
+    async function fetchData() {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/v1/personal-info/clinic/${user.id}`);
+        setClinicData(response.data);
+        setIsDataFetched(true);
+      } catch (error) {
+        // console.error('Error fetching data:', error);
+        setIsDataFetched(false);
       }
-  }, [clinicData, setValue]); 
+    }
+    fetchData();
+  }, [user.id]);
+
+  useEffect(() => {
+    if (clinicData) {
+      setValue("name", clinicData?.clinics?.name);
+      setValue("pincode", clinicData?.address?.pincode);
+      setValue("building", clinicData?.address?.building);
+      setValue("area", clinicData?.address?.area);
+      setValue("landmark", clinicData?.address?.landmark);
+      setValue("townCity", clinicData?.address?.townCity);
+      setValue("state", clinicData?.address?.state);
+      setValue("fee", clinicData?.clinics?.fee);
+      setValue("openingTime", clinicData?.clinics?.openingTime);
+      setValue("closingTime", clinicData?.clinics?.closingTime);
+    }
+  }, [clinicData, setValue]);
 
   return (
-    
+
     <div
       className='h-[70vh] w-[100%] '>
       <h1 className='lg:text-3xl text-2xl p-5 font-mono h-[10vh] bg-gray-900 text-white'>Your Clinic's Information</h1>
@@ -59,7 +62,9 @@ const DoctorClinicInfo = () => {
         className=" h-[67vh] w-[100%] flex justify-center lg:px-[1vw] px-[3vw]">
         <form className=" docInfo mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 overflow-y-scroll lg:pb-[3vh] pb-[10vh] docInputForm flex-grow" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-4">
-
+            {
+              !isDataFetched ? <Alert color="amber" icon={<Icon />}>Please fill the clinic details</Alert> : ""
+            }
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Clinic Name
@@ -203,7 +208,7 @@ const DoctorClinicInfo = () => {
               {...register("openingTime", { required: true })}
             />
             {errors.openingTime && <span>This field is required</span>}
-            
+
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Closing Time
@@ -232,6 +237,25 @@ const DoctorClinicInfo = () => {
 
     </div >
   )
+}
+
+function Icon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+      />
+    </svg>
+  );
 }
 
 export default DoctorClinicInfo;

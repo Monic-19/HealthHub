@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Card, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
+import { Card, Alert, Typography, Input, Checkbox, Button, } from "@material-tailwind/react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { saveDoctorInformation } from "../../services/Operations/personal_InformationAPI";
 import axios from "axios";
+
 
 const DoctorInfo = () => {
   const { register, handleSubmit, formState: { errors }, setValue } = useForm();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.profile.user);
   const [data,setData] = useState();
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
   const onClickSubmit = (data) => {
     dispatch(saveDoctorInformation(user.id, data));
@@ -35,7 +37,9 @@ const DoctorInfo = () => {
         setValue("experience", response.data.doctor.experience);
         setValue("specialization", response.data.doctor.specialization);
         setValue("medicalField", response.data.doctor.medicalField);
+        setIsDataFetched(true);
       } catch (error) {
+        setIsDataFetched(false);
         console.error('Error fetching data:', error);
       }
     }
@@ -52,6 +56,9 @@ const DoctorInfo = () => {
         className="h-[67vh] w-full flex justify-center lg:px-[1vw] px-[3vw] ">
         <form className="mt-8 mb-2 w-full sm:w-96 overflow-y-scroll lg:pb-[3vh] pb-[10vh] docInputForm flex-grow px-2 docInfo" onSubmit={handleSubmit(onClickSubmit)}>
           <div className="mb-1 flex flex-col gap-4">
+          {
+              !isDataFetched ? <Alert color="amber" icon={<Icon />}>Please fill your Personal Information</Alert> : ""
+            }
 
             <Typography variant="h6" color="blue-gray" className="-mb-3">
               Phone Number
@@ -293,6 +300,25 @@ const DoctorInfo = () => {
 
     </div >
   )
+}
+
+function Icon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={2}
+      stroke="currentColor"
+      className="h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+      />
+    </svg>
+  );
 }
 
 export default DoctorInfo
