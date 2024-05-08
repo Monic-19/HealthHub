@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { Card, CardHeader, CardBody, Typography, Avatar, Input, } from "@material-tailwind/react";
 import { motion } from "framer-motion"
 import { useSelector } from 'react-redux';
@@ -28,6 +28,10 @@ const PatientProfile = () => {
 
   const [selected, setSelected] = React.useState(1);
   const setSelectedItem = (value) => setSelected(value);
+  const [reports, setReports] = useState([]);  
+  const [loading, setLoading] = useState(true);  
+  const [error, setError] = useState(null); 
+    
 
   const handleLogout = () => {
     dispatch(logout(navigate));
@@ -37,8 +41,6 @@ const PatientProfile = () => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('image', file);
-
-
 
     setUpdating(true);
     axios.post(`http://localhost:8081/api/v1/personal-info/profile-pic/${user.id}`, formData)
@@ -56,9 +58,28 @@ const PatientProfile = () => {
         console.error('There was a problem with the fetch operation:', error);
         setUpdating(false);
       });
-
   };
 
+    
+    useEffect(() => {
+        // Fetch the reports when the component mounts
+        const fetchReports = async () => {
+            try {
+                // Make a GET request to fetch reports for the specific patient
+                const response = await axios.get(`http://localhost:8081/api/v1/report/patient/${user.id}`);
+                // Set the reports in state
+                setReports(response.data);
+            } catch (err) {
+                // Handle errors and set the error state
+                setError(err);
+            } finally {
+                // Set loading to false when the request is completed
+                setLoading(false);
+            }
+        };
+
+        fetchReports();
+    }, []);  
 
   return (
     <div className={`profile flex lg:flex-row flex-col-reverse overflow-y-scroll lg:gap-0 gap-8 pb-4`}>
@@ -114,18 +135,16 @@ const PatientProfile = () => {
             <h4 className='my-[2vh]'>Previous Reports</h4>
             <Card className="w-[70%] ml-auto mr-auto ">
               <List className='text-sm'>
-                <ListItem selected={selected === 1} onClick={() => { setSelectedItem(1); navigate(`/report/${selected}`); }}>
-                  Document 1
-                </ListItem>
-                <ListItem selected={selected === 2} onClick={() => { setSelectedItem(2); navigate(`/report/${selected}`); }}>
-                  Document 2
-                </ListItem>
-                <ListItem selected={selected === 3} onClick={() => { setSelectedItem(3); navigate(`/report/${selected}`); }}>
-                  Document 3
-                </ListItem>
-                <ListItem selected={selected === 3} onClick={() => { setSelectedItem(4); navigate(`/report/${selected}`); }}>
-                  Document 4
-                </ListItem>
+                {
+                  reports.data && reports.data.map( (report, index) => (
+                    <ListItem key={report.id} selected={selected === index} onClick={() => { setSelectedItem(4); navigate(`/report/${report.id}`); }}>
+                    Report {report.id}
+                  </ListItem>
+                  ))
+                }
+              
+      
+            
               </List>
             </Card>
           </div>

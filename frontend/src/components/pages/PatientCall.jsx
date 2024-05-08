@@ -163,7 +163,7 @@ const PatientCall = () => {
           :
           (
             <div className='absolute top-0 left-0'>
-              <button disabled={feedbackDone} className='absolute w-full lg:w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname}`)}>
+              <button disabled={feedbackDone} className='absolute w-full lg:w-[20vw] lg:top-[65vh] top-[55vh] lg:left-[40vw]  rounded-xl bg-[#0055FE] px-[4.5vw] py-2 text-md font-semibold text-white shadow-sm hover:bg-[#2D71FF] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ' onClick={() => navigate(`/report/write/${patientname.split("-")[1]}`)}>
                 Write Patient Report
               </button>
             </div>

@@ -146,3 +146,31 @@ export const deletePatientReport = async (req: Request, res: Response) => {
         res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
+
+export const getReportById = async(req:Request,res:Response) => {
+    try{
+        const { id } = req.params;
+        const report = await PatientReport.findByPk(id,{
+            include: [
+                {
+                    model: User,
+                    as: 'patient', 
+                    attributes: ['id', 'firstName', 'lastName', 'email'], 
+                },
+                {
+                    model: User,
+                    as: 'doctor', 
+                    attributes: ['id', 'firstName', 'lastName', 'email'], 
+                },
+            ],
+        
+        });
+
+        return res.status(200).json({
+            report,
+        })
+    }catch(error){
+        console.error('Error getting patient report:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+}
