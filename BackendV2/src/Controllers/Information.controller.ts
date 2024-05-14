@@ -8,9 +8,9 @@ import cloudinary from 'cloudinary'
 
 
 cloudinary.v2.config({
-    cloud_name: 'dtpuvzwyu',
-    api_key: '443257453111698',
-    api_secret: 'G_tLJ1hpiFytfIIhQY9Su9ZnQZw',
+    cloud_name: '',
+    api_key: '',
+    api_secret: '',
 });
 
 const saveProfilePic = async(req: Request,res: Response) => {
